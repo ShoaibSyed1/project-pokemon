@@ -1,6 +1,8 @@
 from pygame import Rect
 
 class Sprite:
-    def __init__(self, surface, bounds=Rect(0, 0, 0, 0)):
+    def __init__(self, surface, bounds=None):
         self.surface = surface
+        if bounds == None:
+            bounds = surface.get_rect()
         self.bounds = bounds
