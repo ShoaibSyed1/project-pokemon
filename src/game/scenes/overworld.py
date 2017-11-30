@@ -3,7 +3,7 @@ import pygame
 
 from game.scenes.scene import Scene
 
-from game.components.game_info import GameInfo
+from game.components import GameInfo
 
 class Overworld(Scene):
     def __init__(self, game):
@@ -14,18 +14,18 @@ class Overworld(Scene):
         self.game_info = None
     
     def start(self):
-        from game.components.sprite import Sprite
-        from game.components.transform import Transform
-        from game.math.vector2 import Vector2
-        from game.processors.animation import AnimationProcessor
-        from game.processors.event import EventProcessor
-        from game.processors.render import RenderProcessor
+        from game.components import Animation, Sprite, Transform
+        from game.math import Vector2
+        from game.processors import AnimationProcessor, EventProcessor, RenderProcessor
 
         self.game_info = self.world.create_entity(GameInfo())
 
-        self.world.create_entity(Sprite(pygame.image.load("assets/image.png")), Transform(scale=Vector2(2, 2)))
+        self.world.create_entity(
+            Animation(16, 16, 8, 8, 200, 0, 4),
+            Sprite(pygame.image.load("assets/image.png")),
+            Transform(pos=Vector2(3, 3), scale=Vector2(8, 8)))
 
-        self.world.add_processor(AnimationProcessor())
+        self.world.add_processor(AnimationProcessor(), 2)
         self.world.add_processor(EventProcessor(self.game_info))
         self.world.add_processor(RenderProcessor(self.game.window))
 

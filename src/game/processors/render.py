@@ -2,9 +2,7 @@ import pygame
 
 from esper import Processor
 
-from game.components.sprite import Sprite
-from game.components.transform import Transform
-from game.math.vector2 import Vector2
+from game.components import Sprite, Transform, Vector2
 
 class RenderProcessor(Processor):
     def __init__(self, window):
@@ -20,6 +18,6 @@ class RenderProcessor(Processor):
                     temp_surface,
                     (int(transform.scale.x * spr.surface.get_width()),
                      int(transform.scale.y * spr.surface.get_height())))
-            self.window.blit(temp_surface, (transform.pos.x, transform.pos.y))
+            self.window.blit(temp_surface, (transform.pos.x, transform.pos.y), spr.bounds)
 
         pygame.display.flip()
