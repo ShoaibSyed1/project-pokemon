@@ -1,7 +1,7 @@
 from esper import Processor
 from pymunk import Space
 
-from game.components import PhysicsBody, Transform
+from game.components import PhysicsBody, ScriptComponent, Transform
 
 class PhysicsProcessor(Processor):
     def __init__(self, step_time=0.01):
@@ -25,3 +25,6 @@ class PhysicsProcessor(Processor):
 
         for ent, (phys_body, transform) in self.world.get_components(PhysicsBody, Transform):
             transform.pos = phys_body.body.position
+        
+        for ent, script_comp in self.world.get_component(ScriptComponent):
+            script_comp.script.fixed_update(self.step_time)

@@ -14,6 +14,8 @@ class Overworld(Scene):
         self.game_info = None
 
         self.player = None
+
+        self.scripts = []
     
     def start(self):
         from pygame import Rect
@@ -21,8 +23,8 @@ class Overworld(Scene):
         import pymunk
         from pymunk.vec2d import Vec2d
 
-        from game.components import Animation, Sprite, Transform, PhysicsBody
-        from game.processors import AnimationProcessor, EventProcessor, PhysicsProcessor, RenderProcessor        
+        from game.components import Animation, Sprite, Transform, PhysicsBody, ScriptComponent
+        from game.processors import AnimationProcessor, EventProcessor, PhysicsProcessor, RenderProcessor
 
         self.game_info = self.world.create_entity(GameInfo())
 
@@ -46,6 +48,10 @@ class Overworld(Scene):
         self.world.add_processor(EventProcessor(self.game_info))
         self.world.add_processor(physics)
         self.world.add_processor(RenderProcessor(self.game.window))
+
+        for ent, script_comp in self.world.get_component(ScriptComponent):
+            script_comp.script.entity = ent
+            script_comp.script.world = self.world
 
     def update(self, delta):
         self.game.running = self.world.component_for_entity(self.game_info, GameInfo).running
