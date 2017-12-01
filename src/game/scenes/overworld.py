@@ -52,6 +52,7 @@ class Overworld(Scene):
         for ent, script_comp in self.world.get_component(ScriptComponent):
             script_comp.script.entity = ent
             script_comp.script.world = self.world
+            script_comp.script.start()
 
     def update(self, delta):
         self.game.running = self.world.component_for_entity(self.game_info, GameInfo).running
