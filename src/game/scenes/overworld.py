@@ -18,23 +18,33 @@ class Overworld(Scene):
     def start(self):
         from pygame import Rect
 
-        from game.components import Animation, Sprite, Transform
-        from game.math import Vector2
-        from game.processors import AnimationProcessor, EventProcessor, RenderProcessor
+        import pymunk
+        from pymunk.vec2d import Vec2d
+
+        from game.components import Animation, Sprite, Transform, PhysicsBody
+        from game.processors import AnimationProcessor, EventProcessor, PhysicsProcessor, RenderProcessor        
 
         self.game_info = self.world.create_entity(GameInfo())
 
         self.world.create_entity(
             Animation(16, 16, 8, 8, 50, 0, 4),
             Sprite(pygame.image.load("assets/image.png")),
-            Transform(pos=Vector2(3, 3), scale=Vector2(8, 8)))
+            Transform(pos=Vec2d(3, 3), scale=Vec2d(8, 8)))
+        
+        player_body = pymunk.Body(0, 0, pymunk.Body.KINEMATIC)
+        player_shape = pymunk.Circle(player_body, 32)
 
         self.player = self.world.create_entity(
             Sprite(pygame.image.load("assets/player/player.png"), Rect(0, 0, 32, 48)),
-            Transform(pos=Vector2(64, 64), scale=Vector2(2, 2)))
+            PhysicsBody(player_shape, player_body),
+            Transform(pos=Vec2d(64, 64), scale=Vec2d(2, 2)))
+        
+        physics = PhysicsProcessor()
+        physics.get_space().add(player_body)
 
         self.world.add_processor(AnimationProcessor(), 2)
         self.world.add_processor(EventProcessor(self.game_info))
+        self.world.add_processor(physics)
         self.world.add_processor(RenderProcessor(self.game.window))
 
     def update(self, delta):
