@@ -39,7 +39,7 @@ class Overworld(Scene):
 
         self.player = self.world.create_entity(
             InputComponent([pygame.K_w, pygame.K_a, pygame.K_s, pygame.K_d]),
-            Sprite(pygame.image.load("assets/player/player.png"), Rect(0, 0, 32, 48)),
+            Sprite(pygame.image.load("assets/player/player.png"), Rect(0, 0, 32, 64)),
             ScriptComponent(player_script),
             Tile(Vector2(0, 0), move_speed=1),
             Transform(pos=Vector2(64, 64), scale=Vector2(2, 2)))        

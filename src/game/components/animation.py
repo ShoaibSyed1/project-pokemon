@@ -24,3 +24,15 @@ class Animation:
 
 class ImageSizeError(Exception):
     pass
+
+class AnimationGroups:
+    def __init__(self, current, groups={}):
+        self.current = current
+        self.groups = groups
+
+class AnimationGroup:
+    def __init__(self, should_loop=True, loop_start=0, loop_end=0, delay=1000):
+        self.should_loop = should_loop
+        self.loop_start = loop_start
+        self.loop_end = loop_end
+        self.delay = delay

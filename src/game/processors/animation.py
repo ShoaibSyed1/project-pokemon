@@ -1,20 +1,27 @@
 from esper import Processor
 from pygame import Rect
 
-from game.components import Animation, Sprite, Transform
+from game.components import Animation, AnimationGroups, Sprite, Transform
 
 class AnimationProcessor(Processor):
     def __init__(self):
         pass
     
     def process(self, delta):
+        for ent, (anim, anim_groups) in self.world.get_components(Animation, AnimationGroups):
+            current = anim_groups.groups[anim_groups.current]
+            if current != None:
+                anim.loop_start = current.loop_start
+                anim.loop_end = current.loop_end
+                anim.delay = current.delay
+
         for ent, (anim, spr, transform) in self.world.get_components(Animation, Sprite, Transform):
             anim.counter += delta
 
             if anim.counter >= anim.delay:
                 anim.counter = 0
                 anim.loop_index += 1
-                if anim.loop_index >= anim.loop_max or anim.loop_index >= anim.loop_end:
+                if anim.loop_index >= anim.loop_max or anim.loop_index >= anim.loop_end or anim.loop_index <= anim.loop_start:
                     anim.loop_index = anim.loop_start
                 
                 temp_x = anim.loop_index

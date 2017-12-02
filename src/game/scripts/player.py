@@ -14,7 +14,6 @@ class PlayerScript(Script):
         self.transform = self.world.component_for_entity(self.entity, Transform)
     
     def update(self, delta):
-        print(self.tile.is_moving)
         if not self.tile.is_moving:
             if self.input.keys[pygame.K_w]:
                 self.tile.move_path.insert(0, Direction.UP)
@@ -24,3 +23,5 @@ class PlayerScript(Script):
                 self.tile.move_path.insert(0, Direction.LEFT)
             elif self.input.keys[pygame.K_d]:
                 self.tile.move_path.insert(0, Direction.RIGHT)
+        else:
+            pass
