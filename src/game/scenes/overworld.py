@@ -20,11 +20,11 @@ class Overworld(Scene):
     def start(self):
         from pygame import Rect
 
-        import pymunk
+        import Box2D
         from pymunk.vec2d import Vec2d
 
-        from game.components import Animation, Sprite, Transform, PhysicsBody, ScriptComponent
-        from game.processors import AnimationProcessor, EventProcessor, PhysicsProcessor, RenderProcessor, ScriptProcessor
+        from game.components import Animation, Sprite, Transform, ScriptComponent
+        from game.processors import AnimationProcessor, EventProcessor, RenderProcessor, ScriptProcessor
         from game.scripts import PlayerScript
 
         self.game_info = self.world.create_entity(GameInfo())
@@ -35,22 +35,14 @@ class Overworld(Scene):
             Transform(pos=Vec2d(3, 3), scale=Vec2d(8, 8)))
         
         player_script = PlayerScript()
-        
-        player_body = pymunk.Body(0, 0, pymunk.Body.KINEMATIC)
-        player_shape = pymunk.Circle(player_body, 32)
 
         self.player = self.world.create_entity(
             Sprite(pygame.image.load("assets/player/player.png"), Rect(0, 0, 32, 48)),
-            PhysicsBody(player_shape, player_body),
             ScriptComponent(player_script),
-            Transform(pos=Vec2d(64, 64), scale=Vec2d(2, 2)))
-        
-        physics = PhysicsProcessor()
-        physics.get_space().add(player_body)
+            Transform(pos=Vec2d(64, 64), scale=Vec2d(2, 2)))        
 
         self.world.add_processor(AnimationProcessor(), 2)
         self.world.add_processor(EventProcessor(self.game_info))
-        self.world.add_processor(physics)
         self.world.add_processor(RenderProcessor(self.game.window))
         self.world.add_processor(ScriptProcessor())
 
