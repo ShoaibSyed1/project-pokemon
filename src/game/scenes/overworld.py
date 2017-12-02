@@ -21,9 +21,9 @@ class Overworld(Scene):
         from pygame import Rect
 
         import Box2D
-        from pymunk.vec2d import Vec2d
+        from pygame.math import Vector2
 
-        from game.components import Animation, Sprite, Transform, ScriptComponent
+        from game.components import Animation, InputComponent, Sprite, Transform, ScriptComponent
         from game.processors import AnimationProcessor, EventProcessor, RenderProcessor, ScriptProcessor
         from game.scripts import PlayerScript
 
@@ -32,14 +32,15 @@ class Overworld(Scene):
         self.world.create_entity(
             Animation(16, 16, 8, 8, 50, 0, 4),
             Sprite(pygame.image.load("assets/image.png")),
-            Transform(pos=Vec2d(3, 3), scale=Vec2d(8, 8)))
+            Transform(pos=Vector2(3, 3), scale=Vector2(8, 8)))
         
         player_script = PlayerScript()
 
         self.player = self.world.create_entity(
+            InputComponent([pygame.K_w, pygame.K_a, pygame.K_s, pygame.K_d]),
             Sprite(pygame.image.load("assets/player/player.png"), Rect(0, 0, 32, 48)),
             ScriptComponent(player_script),
-            Transform(pos=Vec2d(64, 64), scale=Vec2d(2, 2)))        
+            Transform(pos=Vector2(64, 64), scale=Vector2(2, 2)))        
 
         self.world.add_processor(AnimationProcessor(), 2)
         self.world.add_processor(EventProcessor(self.game_info))

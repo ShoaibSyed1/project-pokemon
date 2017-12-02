@@ -2,7 +2,7 @@ import pygame
 
 from esper import Processor
 
-from pymunk.vec2d import Vec2d
+from pygame.math import Vector2
 
 from game.components import Sprite, Transform
 
@@ -15,7 +15,7 @@ class RenderProcessor(Processor):
         
         for ent, (spr, transform) in self.world.get_components(Sprite, Transform):
             temp_surface = spr.surface
-            if transform.scale != Vec2d(1.0, 1.0):
+            if transform.scale != Vector2(1.0, 1.0):
                 temp_surface = pygame.transform.scale(
                     temp_surface,
                     (int(transform.scale.x * spr.surface.get_width()),

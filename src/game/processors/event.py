@@ -2,7 +2,7 @@ import pygame
 
 from esper import Processor
 
-from game.components import GameInfo, ScriptComponent
+from game.components import GameInfo, InputComponent,  ScriptComponent
 
 class EventProcessor(Processor):
     def __init__(self, game_info):
@@ -12,6 +12,14 @@ class EventProcessor(Processor):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.world.component_for_entity(self.game_info, GameInfo).running = False
-            
-            for ent, script_comp in self.world.get_component(ScriptComponent):
-                script_comp.script.on_event(event)
+            elif event.type == pygame.KEYDOWN:
+                key = event.key
+                for ent, inp in self.world.get_component(InputComponent):
+                    if key in inp.keys:
+                        inp.keys[key] = True
+            elif event.type == pygame.KEYUP:
+                key = event.key
+                for ent, inp in self.world.get_component(InputComponent):
+                    if key in inp.keys:
+                        inp.keys[key] = False
+                    
