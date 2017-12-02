@@ -2,7 +2,7 @@ import pygame
 
 from esper import Processor
 
-from game.components import GameInfo, InputComponent,  ScriptComponent
+from game.components import GameInfo, InputComponent, ScriptComponent
 
 class EventProcessor(Processor):
     def __init__(self, game_info):
