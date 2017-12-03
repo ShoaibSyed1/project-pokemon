@@ -23,7 +23,7 @@ class Overworld(Scene):
         import Box2D
         from pygame.math import Vector2
 
-        from game.components import Animation, InputComponent, Sprite, Transform, ScriptComponent, Tile
+        from game.components import Animation, AnimationGroup, AnimationGroups, InputComponent, Sprite, Transform, ScriptComponent, Tile
         from game.processors import AnimationProcessor, EventProcessor, RenderProcessor, ScriptProcessor, TileProcessor
         from game.scripts import PlayerScript
 
@@ -38,6 +38,11 @@ class Overworld(Scene):
         player_script = PlayerScript()
 
         self.player = self.world.create_entity(
+            Animation(48, 32, 16, 32, 200, 1, 3),
+            AnimationGroups('still', {
+                'still': AnimationGroup(True, 0, 1, -1),
+                'walk_down': AnimationGroup(True, 1, 3, 100)
+            }),
             InputComponent([pygame.K_w, pygame.K_a, pygame.K_s, pygame.K_d]),
             Sprite(pygame.image.load("assets/player/player.png"), Rect(0, 0, 32, 64)),
             ScriptComponent(player_script),

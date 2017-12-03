@@ -8,6 +8,7 @@ class AnimationProcessor(Processor):
         pass
     
     def process(self, delta):
+        et = None
         for ent, (anim, anim_groups) in self.world.get_components(Animation, AnimationGroups):
             current = anim_groups.groups[anim_groups.current]
             if current != None:
@@ -17,6 +18,9 @@ class AnimationProcessor(Processor):
 
         for ent, (anim, spr, transform) in self.world.get_components(Animation, Sprite, Transform):
             anim.counter += delta
+
+            if anim.delay == -1:
+                anim.counter = 0
 
             if anim.counter >= anim.delay:
                 anim.counter = 0
