@@ -23,8 +23,8 @@ class Overworld(Scene):
         import Box2D
         from pygame.math import Vector2
 
-        from game.components import Animation, AnimationGroup, AnimationGroups, InputComponent, Sprite, Transform, ScriptComponent, Tile
-        from game.processors import AnimationProcessor, EventProcessor, RenderProcessor, ScriptProcessor, TileProcessor
+        from game.components import Animation, AnimationGroup, AnimationGroups, InputComponent, Sprite, Transform, ScriptComponent, Tile, WorldInfo
+        from game.processors import AnimationProcessor, EventProcessor, RenderProcessor, ScriptProcessor, TileProcessor, WorldProcessor
         from game.scripts import PlayerScript
 
         self.game_info = self.world.create_entity(GameInfo())
@@ -47,13 +47,18 @@ class Overworld(Scene):
             Sprite(pygame.image.load("assets/player/player.png"), Rect(0, 0, 32, 64)),
             ScriptComponent(player_script),
             Tile(Vector2(0, 0), move_speed=1),
-            Transform(pos=Vector2(64, 64), scale=Vector2(2, 2)))        
+            Transform(pos=Vector2(64, 64), scale=Vector2(2, 2)))
+        
+        world_info = self.world.create_entity(
+            WorldInfo("surface")
+        )
 
         self.world.add_processor(AnimationProcessor(), 2)
         self.world.add_processor(EventProcessor(self.game_info))
         self.world.add_processor(RenderProcessor(self.game.window))
         self.world.add_processor(ScriptProcessor())
         self.world.add_processor(TileProcessor())
+        self.world.add_processor(WorldProcessor(world_info, self.player))
 
         for ent, script_comp in self.world.get_component(ScriptComponent):
             script_comp.script.entity = ent

@@ -8,17 +8,6 @@ world.json {
     ]
 }
 
-// Used to define tilesets
-tileset.json {
-    tile_size: %tile_size%, // Size of each tile in pixels
-    tiles: [ // List of tiles in tileset
-        {
-            name: %name%, // Name of tile
-            pos: [%x%, %y%] // Position of tile in tileset (in pixels)
-        }
-    ]
-}
-
 // Used to define individual chunks in the world
 chunk.json {
     mapping: %path%, // Maps tiles to ids for easier usage (Path relative to 'chunk.json'/mappings)
@@ -36,6 +25,17 @@ mapping.json {
                     id: %id% // ID to match tile to
                 }
             ]
+        }
+    ]
+}
+
+// Used to define tilesets
+tileset.json {
+    tile_size: %tile_size%, // Size of each tile in pixels
+    tiles: [ // List of tiles in tileset
+        {
+            name: %name%, // Name of tile
+            pos: [%x%, %y%] // Position of tile in tileset (in pixels)
         }
     ]
 }

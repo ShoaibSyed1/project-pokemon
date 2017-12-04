@@ -3,3 +3,4 @@ class WorldInfo:
         self.name = name
 
         self.info = None
+        self.loaded = []
