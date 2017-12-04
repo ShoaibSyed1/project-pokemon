@@ -1,0 +1,43 @@
+// Used to define a world and it's available tilesets
+world.json {
+    tilesets: [
+        {
+            name: %name%, // Tileset Name
+            path: %path%, // Path to tileset
+            tile_size: %tile_size%, // Size of each tile in pixels
+            tiles: [ // List of tiles in tileset
+                {
+                    name: %name%, // Name of tile
+                    pos: [%x%, %y%] // Position of tile in tileset
+                }
+            ]
+        }
+    ],
+    chunks: [ // 16x16 chunks of tiles in the world
+        {
+            pos: [%x%, %y%], // Chunk position
+            path: %path% // JSON File for chunk
+        }
+    ]
+}
+
+// Used to define individual chunks in the world
+chunk.json {
+    mapping: %path%, // Maps tiles to ids for easier usage
+    chunk: [[%id%]]
+}
+
+// Used to map tile names to ids
+mapping.json {
+    mappings: [
+        {
+            name: %name%, // Name of tileset
+            tiles: [
+                {
+                    name: %name%, // Name of tile
+                    id: %id% // ID to match tile to
+                }
+            ]
+        }
+    ]
+}
