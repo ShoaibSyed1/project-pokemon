@@ -2,38 +2,59 @@ import json
 
 from esper import Processor
 
+import pygame
+
+from pygame.math import Vector2
+
 from game import paths
-from game.components import Transform, WorldInfo
+from game.components import Sprite, Transform, WorldInfo
 
 class WorldProcessor(Processor):
     def __init__(self, entity, player):
-        self.world_info = entity
+        self.world_info_entity = entity
         self.player = player
+        self.tilesets = {}
     
     def process(self, delta):
-        world_info = self.world.component_for_entity(self.world_info, WorldInfo)
+        world_info = self.world.component_for_entity(self.world_info_entity, WorldInfo)
 
-        if world_info.info == None:
-            world_path = paths.get_world(world_info.name) + "world.json"
-            world_json = open(world_path)
-            world_info.info = json.load(world_json)
-        
-        player_transform = self.world.component_for_entity(self.player, Transform)
-        player_pos = player_transform.pos
-        chunk_x = int(player_pos.x / 256) #TODO: Replace with constants
-        chunk_y = int(player_pos.y / 256)
+        if world_info.mappings == None:
+            mappings_path = "assets/mappings.json"
+            mappings_json = open(mappings_path)
+            world_info.mappings = json.load(mappings_json)
+            mappings_json.close()
 
-        if not [chunk_x, chunk_y] in world_info.loaded:
-            chunk_path = None
-            for chunk in world_info.info['chunks']:
-                if chunk['pos'] == [chunk_x, chunk_y]:
-                    chunk_path = chunk['path']
+            for tileset_name in world_info.mappings['tilesets']:
+                tileset_json_path = "assets/tilesets/" + tileset_name + ".json"
+                tileset_img_path = "assets/tilesets/" + tileset_name + ".png"
 
-            chunk_path = paths.get_chunk(world_info.name, chunk_path)
+                tileset_json = open(tileset_json_path)
+                tileset = json.load(tileset_json)
+                tileset_json.close()
+
+                tileset_img = pygame.image.load(tileset_img_path)
+
+                self.tilesets[tileset_name] = {
+                    'info': tileset,
+                    'img': tileset_img
+                }
+            
+            chunk_path = "assets/chunk.json"
             chunk_json = open(chunk_path)
             chunk = json.load(chunk_json)
+            chunk_json.close()
 
-            mapping_path = paths.get_mapping(world_info.name, chunk['mapping'])
-            mapping_json = open(mapping_path)
-            mapping = json.load(mapping_json)
-            #TODO: Load chunk
+            for y in range(0, 16):
+                for x in range(0, 16):
+                    tile_id = chunk['layout'][y][x]
+                    tile_info = world_info.mappings[str(tile_id)]
+                    tileset_name = tile_info[0]
+                    tile_name = tile_info[1]
+
+                    tileset = self.tilesets[tileset_name]
+                    tile_img_pos = tileset['info'][tile_name]
+
+                    spr = Sprite(tileset['img'], pygame.Rect(tile_img_pos[0], tile_img_pos[1], 32, 32))
+                    transform = Transform(Vector2(x * 32, y * 32), Vector2(2, 2))
+
+                    self.world.create_entity(spr, transform)

@@ -1,5 +1,3 @@
-from pygame import Rect
-
 class Sprite:
     def __init__(self, surface, bounds=None):
         self.surface = surface

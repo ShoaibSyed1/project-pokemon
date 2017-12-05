@@ -33,7 +33,7 @@ class Overworld(Scene):
             Animation(16, 16, 8, 8, 50, 0, 4),
             Sprite(pygame.image.load("assets/image.png")),
             Tile(Vector2(0, 0)),
-            Transform(pos=Vector2(3, 3), scale=Vector2(8, 8)))
+            Transform(pos=Vector2(600, 3), scale=Vector2(8, 8)))
         
         player_script = PlayerScript()
 
