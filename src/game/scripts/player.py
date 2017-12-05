@@ -2,17 +2,24 @@ from enum import Enum
 
 import pygame
 
+from pygame.math import Vector2
+
 from game.components import AnimationGroups, InputComponent
 from game.components.tile import Direction, Tile
 from game.components.transform import Transform
 from game.scripts.script import Script
 
 class PlayerScript(Script):
+    def __init__(self, camera_entity):
+        self.camera_entity = camera_entity
+    
     def start(self):
         self.anim_groups = self.world.component_for_entity(self.entity, AnimationGroups)
         self.input = self.world.component_for_entity(self.entity, InputComponent)
         self.tile = self.world.component_for_entity(self.entity, Tile)
         self.transform = self.world.component_for_entity(self.entity, Transform)
+
+        self.camera_transform = self.world.component_for_entity(self.camera_entity, Transform)
     
     def update(self, delta):
         if not self.tile.is_moving:
@@ -28,3 +35,5 @@ class PlayerScript(Script):
         else:
             if self.tile.move_dir == Direction.DOWN:
                 self.anim_groups.current = 'walk_down'
+        
+        self.camera_transform.pos = Vector2(self.transform.pos.x - 320, self.transform.pos.y - 240)

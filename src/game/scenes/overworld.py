@@ -15,12 +15,12 @@ class Overworld(Scene):
 
         self.player = None
 
-        self.scripts = []
+        self.scale = 2
+
     
     def start(self):
         from pygame import Rect
 
-        import Box2D
         from pygame.math import Vector2
 
         from game.components import Animation, AnimationGroup, AnimationGroups, InputComponent, Sprite, Transform, ScriptComponent, Tile, WorldInfo
@@ -32,10 +32,13 @@ class Overworld(Scene):
         self.world.create_entity(
             Animation(16, 16, 8, 8, 50, 0, 4),
             Sprite(pygame.image.load("assets/image.png")),
-            Tile(Vector2(0, 0)),
+            Tile(Vector2(33, 0)),
             Transform(pos=Vector2(600, 3), scale=Vector2(8, 8)))
-        
-        player_script = PlayerScript()
+
+        self.camera = self.world.create_entity(
+            Transform(pos=Vector2(0, 0), scale=Vector2(2, 2)))
+
+        player_script = PlayerScript(self.camera)
 
         self.player = self.world.create_entity(
             Animation(48, 32, 16, 32, 200, 1, 3),
@@ -44,7 +47,7 @@ class Overworld(Scene):
                 'walk_down': AnimationGroup(True, 1, 3, 100)
             }),
             InputComponent([pygame.K_w, pygame.K_a, pygame.K_s, pygame.K_d]),
-            Sprite(pygame.image.load("assets/player/player.png"), Rect(0, 0, 32, 64)),
+            Sprite(pygame.image.load("assets/player/player.png"), Rect(0, 0, 32, 64), layer=10),
             ScriptComponent(player_script),
             Tile(Vector2(0, 0), move_speed=1),
             Transform(pos=Vector2(64, 64), scale=Vector2(2, 2)))
@@ -55,10 +58,10 @@ class Overworld(Scene):
 
         self.world.add_processor(AnimationProcessor(), 2)
         self.world.add_processor(EventProcessor(self.game_info))
-        self.world.add_processor(RenderProcessor(self.game.window))
+        self.world.add_processor(RenderProcessor(self.game.window, self.camera))
         self.world.add_processor(ScriptProcessor())
         self.world.add_processor(TileProcessor())
-        self.world.add_processor(WorldProcessor(world_info, self.player))
+        self.world.add_processor(WorldProcessor(world_info, self.player, self.scale))
 
         for ent, script_comp in self.world.get_component(ScriptComponent):
             script_comp.script.entity = ent

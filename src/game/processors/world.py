@@ -6,30 +6,33 @@ import pygame
 
 from pygame.math import Vector2
 
-from game import paths
+from game import constants, paths
 from game.components import Sprite, Transform, WorldInfo
 
 class WorldProcessor(Processor):
-    def __init__(self, entity, player):
+    def __init__(self, entity, player, scale):
         self.world_info_entity = entity
         self.player = player
         self.tilesets = {}
+        self.scale = scale
+        self.loaded_chunks = []
+        self.loaded_entities = {}
     
     def process(self, delta):
-        world_info = self.world.component_for_entity(self.world_info_entity, WorldInfo)
+        self.world_info = self.world.component_for_entity(self.world_info_entity, WorldInfo)
 
-        if world_info.info == None:
-            info_path = paths.get_world(world_info.name)
+        if self.world_info.info == None:
+            info_path = paths.get_world(self.world_info.name)
             info_json = open(info_path)
-            world_info.info = json.load(info_json)
+            self.world_info.info = json.load(info_json)
             info_json.close()
 
-            mappings_path = paths.get_mappings(world_info.name)
+            mappings_path = paths.get_mappings(self.world_info.name)
             mappings_json = open(mappings_path)
-            world_info.mappings = json.load(mappings_json)
+            self.world_info.mappings = json.load(mappings_json)
             mappings_json.close()
 
-            for tileset_name in world_info.mappings['tilesets']:
+            for tileset_name in self.world_info.mappings['tilesets']:
                 tileset_json_path = "assets/tilesets/" + tileset_name + ".json"
                 tileset_img_path = "assets/tilesets/" + tileset_name + ".png"
 
@@ -44,24 +47,46 @@ class WorldProcessor(Processor):
                     'img': tileset_img
                 }
             
-            chunk_name = next(filter(lambda ch: ch['pos']==[0, 0], world_info.info['chunks']))['name']
+        player_pos = self.world.component_for_entity(self.player, Transform).pos
 
-            chunk_path = paths.get_chunk(world_info.name, chunk_name)
-            chunk_json = open(chunk_path)
-            chunk = json.load(chunk_json)
-            chunk_json.close()
+        chunk_x = int(player_pos.x / (constants.CHUNK_SIZE_PIXELS * self.scale))
+        chunk_y = int(player_pos.y / (constants.CHUNK_SIZE_PIXELS * self.scale))
 
-            for y in range(0, 16):
-                for x in range(0, 16):
-                    tile_id = chunk['layout'][y][x]
-                    tile_info = world_info.mappings[str(tile_id)]
-                    tileset_name = tile_info[0]
-                    tile_name = tile_info[1]
+        if not (chunk_x, chunk_y) in self.loaded_chunks:
+            for chunk_pos in self.loaded_chunks:
+                for entity in self.loaded_entities[chunk_pos]:
+                    self.world.delete_entity(entity)
+                    self.loaded_entities[chunk_pos] = None
+            self.loaded_chunks.clear()
+            self.load_chunk(chunk_x, chunk_y)
+    
+    def load_chunk(self, chunk_x, chunk_y):
+        self.loaded_chunks.append((chunk_x, chunk_y))
+        try:
+            chunk_name = next(filter(lambda ch: ch['pos']==[chunk_x, chunk_y], self.world_info.info['chunks']))['name']
+        except StopIteration:
+            print("No chunk defined for chunk position ({}, {})".format(chunk_x, chunk_y))
+            raise
 
-                    tileset = self.tilesets[tileset_name]
-                    tile_img_pos = tileset['info'][tile_name]
+        chunk_path = paths.get_chunk(self.world_info.name, chunk_name)
+        chunk_json = open(chunk_path)
+        chunk = json.load(chunk_json)
+        chunk_json.close()
 
-                    spr = Sprite(tileset['img'], pygame.Rect(tile_img_pos[0], tile_img_pos[1], 32, 32))
-                    transform = Transform(Vector2(x * 32, y * 32), Vector2(2, 2))
+        self.loaded_entities[(chunk_x, chunk_y)] = []
 
-                    self.world.create_entity(spr, transform)
+        for y in range(0, constants.CHUNK_SIZE):
+            for x in range(0, constants.CHUNK_SIZE):
+                tile_id = chunk['layout'][y][x]
+                tile_info = self.world_info.mappings[str(tile_id)]
+                tileset_name = tile_info[0]
+                tile_name = tile_info[1]
+
+                tileset = self.tilesets[tileset_name]
+                tile_img_pos = tileset['info'][tile_name]
+                tile_size = tileset['info']['tile_size']
+
+                spr = Sprite(tileset['img'], pygame.Rect(tile_img_pos[0], tile_img_pos[1], tile_size, tile_size), self.scale)
+                transform = Transform(Vector2(x * tile_size * self.scale, y * tile_size * self.scale), Vector2(self.scale, self.scale))
+                
+                self.loaded_entities[(chunk_x, chunk_y)].append(self.world.create_entity(spr, transform))

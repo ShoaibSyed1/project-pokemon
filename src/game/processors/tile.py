@@ -1,5 +1,7 @@
 from esper import Processor
 
+from pygame.math import Vector2
+
 from game.components import Direction, Tile, Transform
 
 class TileProcessor(Processor):
@@ -8,6 +10,8 @@ class TileProcessor(Processor):
     
     def process(self, delta):
         for ent, (tile, transform) in self.world.get_components(Tile, Transform):
+            if not tile.is_moving:
+                transform.pos = Vector2(tile.pos.x * self.tile_size, tile.pos.y * self.tile_size)
             if len(tile.move_path) > 0:
                 tile.move_dir = tile.move_path[-1]
                 pos = tile.pos
