@@ -18,8 +18,13 @@ class WorldProcessor(Processor):
     def process(self, delta):
         world_info = self.world.component_for_entity(self.world_info_entity, WorldInfo)
 
-        if world_info.mappings == None:
-            mappings_path = "assets/mappings.json"
+        if world_info.info == None:
+            info_path = paths.get_world(world_info.name)
+            info_json = open(info_path)
+            world_info.info = json.load(info_json)
+            info_json.close()
+
+            mappings_path = paths.get_mappings(world_info.name)
             mappings_json = open(mappings_path)
             world_info.mappings = json.load(mappings_json)
             mappings_json.close()
@@ -39,7 +44,9 @@ class WorldProcessor(Processor):
                     'img': tileset_img
                 }
             
-            chunk_path = "assets/chunk.json"
+            chunk_name = next(filter(lambda ch: ch['pos']==[0, 0], world_info.info['chunks']))['name']
+
+            chunk_path = paths.get_chunk(world_info.name, chunk_name)
             chunk_json = open(chunk_path)
             chunk = json.load(chunk_json)
             chunk_json.close()
