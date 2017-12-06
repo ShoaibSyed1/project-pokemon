@@ -11,8 +11,8 @@ class Overworld(Scene):
 
         self.world = esper.World()
         
-        self.game_info = None
-
+        self.camera = None
+        self.game_info = None        
         self.player = None
 
         self.scale = 2

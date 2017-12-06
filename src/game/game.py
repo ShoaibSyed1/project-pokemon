@@ -1,5 +1,6 @@
 import pygame
 
+from game.scenes.battle import Battle
 from game.scenes.overworld import Overworld
 
 class Game:
@@ -11,7 +12,7 @@ class Game:
         self.clock = pygame.time.Clock()
         self.delta = 0
 
-        self.scene = Overworld(self)
+        self.scene = Battle(self)
 
         self.running = False
     
@@ -24,3 +25,8 @@ class Game:
             self.scene.update(self.delta)
 
             self.delta = self.clock.tick(60)
+
+    def set_scene(self, scene):
+        scene.prev = self.scene
+        self.scene = scene
+        self.scene.start()

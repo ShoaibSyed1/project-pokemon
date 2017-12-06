@@ -91,24 +91,24 @@ class WorldProcessor(Processor):
 
         chunk_surface = pygame.Surface((int(constants.CHUNK_SIZE_PIXELS * self.scale),
                                        int(constants.CHUNK_SIZE_PIXELS * self.scale)))
+        for layout in chunk['layouts']:
+            for y in range(0, constants.CHUNK_SIZE):
+                for x in range(0, constants.CHUNK_SIZE):
+                    tile_id = layout[y][x]
+                    tile_info = self.world_info.mappings[str(tile_id)]
+                    tileset_name = tile_info[0]
+                    tile_name = tile_info[1]
 
-        for y in range(0, constants.CHUNK_SIZE):
-            for x in range(0, constants.CHUNK_SIZE):
-                tile_id = chunk['layout'][y][x]
-                tile_info = self.world_info.mappings[str(tile_id)]
-                tileset_name = tile_info[0]
-                tile_name = tile_info[1]
+                    tileset = self.tilesets[tileset_name]
+                    tile_img_pos = tileset['info'][tile_name]
+                    tile_size = tileset['info']['tile_size']
 
-                tileset = self.tilesets[tileset_name]
-                tile_img_pos = tileset['info'][tile_name]
-                tile_size = tileset['info']['tile_size']
-
-                chunk_surface.blit(tileset['img'],
-                                   (x * tile_size, y * tile_size),
-                                   pygame.Rect(tile_img_pos[0],
-                                               tile_img_pos[1],
-                                               tile_size,
-                                               tile_size))
+                    chunk_surface.blit(tileset['img'],
+                                    (x * tile_size, y * tile_size),
+                                    pygame.Rect(tile_img_pos[0],
+                                                tile_img_pos[1],
+                                                tile_size,
+                                                tile_size))
         
         spr = Sprite(chunk_surface, pygame.Rect(0, 0, constants.CHUNK_SIZE_PIXELS, constants.CHUNK_SIZE_PIXELS), self.scale)
         transform = Transform(Vector2(chunk_x * constants.CHUNK_SIZE_PIXELS * self.scale, chunk_y * constants.CHUNK_SIZE_PIXELS * self.scale),
