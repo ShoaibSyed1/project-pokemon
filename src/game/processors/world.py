@@ -33,8 +33,8 @@ class WorldProcessor(Processor):
             mappings_json.close()
 
             for tileset_name in self.world_info.mappings['tilesets']:
-                tileset_json_path = "assets/tilesets/" + tileset_name + ".json"
-                tileset_img_path = "assets/tilesets/" + tileset_name + ".png"
+                tileset_json_path = paths.get_tileset_json(tileset_name)
+                tileset_img_path = paths.get_tileset_img(tileset_name)
 
                 tileset_json = open(tileset_json_path)
                 tileset = json.load(tileset_json)
@@ -46,19 +46,33 @@ class WorldProcessor(Processor):
                     'info': tileset,
                     'img': tileset_img
                 }
-            
+        
         player_pos = self.world.component_for_entity(self.player, Transform).pos
 
         chunk_x = int(player_pos.x / (constants.CHUNK_SIZE_PIXELS * self.scale))
         chunk_y = int(player_pos.y / (constants.CHUNK_SIZE_PIXELS * self.scale))
+        
+        new_chunks_pos = []
 
-        if not (chunk_x, chunk_y) in self.loaded_chunks:
-            for chunk_pos in self.loaded_chunks:
-                for entity in self.loaded_entities[chunk_pos]:
+        for y_offset in range(-1, 2):
+            for x_offset in range(-1, 2):
+                act_x = max(0, chunk_x + x_offset)
+                act_y = max(0, chunk_y + y_offset)
+
+                new_chunks_pos.append((act_x, act_y))
+        
+        new_chunks_pos = list(set(new_chunks_pos))
+        
+        for old_chunk_pos in self.loaded_chunks:
+            if not old_chunk_pos in new_chunks_pos:
+                for entity in self.loaded_entities[old_chunk_pos]:
                     self.world.delete_entity(entity)
-                    self.loaded_entities[chunk_pos] = None
-            self.loaded_chunks.clear()
-            self.load_chunk(chunk_x, chunk_y)
+                self.loaded_entities[old_chunk_pos] = None
+                self.loaded_chunks.remove(old_chunk_pos)
+        
+        for new_chunk_pos in new_chunks_pos:
+            if not new_chunk_pos in self.loaded_chunks:
+                self.load_chunk(new_chunk_pos[0], new_chunk_pos[1])
     
     def load_chunk(self, chunk_x, chunk_y):
         self.loaded_chunks.append((chunk_x, chunk_y))
@@ -75,6 +89,9 @@ class WorldProcessor(Processor):
 
         self.loaded_entities[(chunk_x, chunk_y)] = []
 
+        chunk_surface = pygame.Surface((int(constants.CHUNK_SIZE_PIXELS * self.scale),
+                                       int(constants.CHUNK_SIZE_PIXELS * self.scale)))
+
         for y in range(0, constants.CHUNK_SIZE):
             for x in range(0, constants.CHUNK_SIZE):
                 tile_id = chunk['layout'][y][x]
@@ -86,7 +103,14 @@ class WorldProcessor(Processor):
                 tile_img_pos = tileset['info'][tile_name]
                 tile_size = tileset['info']['tile_size']
 
-                spr = Sprite(tileset['img'], pygame.Rect(tile_img_pos[0], tile_img_pos[1], tile_size, tile_size), self.scale)
-                transform = Transform(Vector2(x * tile_size * self.scale, y * tile_size * self.scale), Vector2(self.scale, self.scale))
-                
-                self.loaded_entities[(chunk_x, chunk_y)].append(self.world.create_entity(spr, transform))
+                chunk_surface.blit(tileset['img'],
+                                   (x * tile_size, y * tile_size),
+                                   pygame.Rect(tile_img_pos[0],
+                                               tile_img_pos[1],
+                                               tile_size,
+                                               tile_size))
+        
+        spr = Sprite(chunk_surface, pygame.Rect(0, 0, constants.CHUNK_SIZE_PIXELS, constants.CHUNK_SIZE_PIXELS), self.scale)
+        transform = Transform(Vector2(chunk_x * constants.CHUNK_SIZE_PIXELS * self.scale, chunk_y * constants.CHUNK_SIZE_PIXELS * self.scale),
+                              Vector2(self.scale, self.scale))
+        self.loaded_entities[(chunk_x, chunk_y)].append(self.world.create_entity(spr, transform))

@@ -5,7 +5,7 @@ from game.scenes.overworld import Overworld
 class Game:
     def __init__(self):
         pygame.init()
-        self.window = pygame.display.set_mode((640, 480))
+        self.window = pygame.display.set_mode((1024, 576))
         pygame.display.set_caption("Project Pokemon")
 
         self.clock = pygame.time.Clock()

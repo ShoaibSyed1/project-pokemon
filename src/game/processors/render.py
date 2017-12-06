@@ -10,7 +10,7 @@ class RenderProcessor(Processor):
     def __init__(self, window, camera_entity):
         self.window = window
         self.camera_entity = camera_entity
-        self.batch = pygame.surface.Surface((640, 480))
+        self.batch = pygame.surface.Surface((1024, 576))
     
     def process(self, delta):
         self.window.fill((255, 255, 255))

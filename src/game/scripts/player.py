@@ -36,4 +36,4 @@ class PlayerScript(Script):
             if self.tile.move_dir == Direction.DOWN:
                 self.anim_groups.current = 'walk_down'
         
-        self.camera_transform.pos = Vector2(self.transform.pos.x - 320, self.transform.pos.y - 240)
+        self.camera_transform.pos = Vector2(self.transform.pos.x - 512, self.transform.pos.y - 288)
