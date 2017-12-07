@@ -1,4 +1,5 @@
 from game.components.animation import *
+from game.components.event import *
 from game.components.game_info import *
 from game.components.input import *
 from game.components.script import *

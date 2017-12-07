@@ -2,7 +2,7 @@ import pygame
 
 from esper import Processor
 
-from game.components import GameInfo, InputComponent, ScriptComponent
+from game.components import EventListener, GameInfo, InputComponent, ScriptComponent
 
 class EventProcessor(Processor):
     def __init__(self, game_info):
@@ -22,4 +22,7 @@ class EventProcessor(Processor):
                 for ent, inp in self.world.get_component(InputComponent):
                     if key in inp.keys:
                         inp.keys[key] = False
-                    
+            
+            for ent, (el, script_comp) in self.world.get_components(EventListener, ScriptComponent):
+                if event.type in el.listen:
+                    script_comp.script.on_event(event)
