@@ -20,7 +20,7 @@ class UiController(Script):
     
     def on_event(self, event):
         for ent, (element, script_comp, transform) in self.world.get_components(Element, ScriptComponent, Transform):
-            element_size = Vector2(element.size.x * transform.scale.x, element.size.y * transform.scale.y)
+            element_size = Vector2(element.size.x, element.size.y)
 
             if event.type == pygame.MOUSEMOTION:
                 to_remove = []
@@ -28,7 +28,7 @@ class UiController(Script):
                     t_element = self.world.component_for_entity(t_ent, Element)
                     t_script_comp = self.world.component_for_entity(t_ent, ScriptComponent)
                     t_transform = self.world.component_for_entity(t_ent, Transform)
-                    t_element_size = Vector2(t_element.size.x * t_transform.scale.x, t_element.size.y * t_transform.scale.y)
+                    t_element_size = Vector2(t_element.size.x, t_element.size.y)
                     if not is_inside(event.pos, t_transform.pos, t_element_size):
                         t_script_comp.script.on_ui_event(UiEvent(UiEventType.MOUSE_LEAVE))
                         to_remove.append(t_ent)
@@ -53,8 +53,6 @@ class UiController(Script):
                 if ent in self.hold_tracking:
                     script_comp.script.on_ui_event(ui_event)
                     self.hold_tracking.remove(ent)
-                elif is_inside(event.pos, transform.pos, element_size):
-                    script_comp.script.on_ui_event(ui_event)
     
 
 def is_inside(mouse_pos, pos, size):

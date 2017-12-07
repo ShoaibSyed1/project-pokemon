@@ -7,7 +7,7 @@ import pygame
 from pygame.math import Vector2
 
 from game import constants, paths
-from game.components import Sprite, Transform, WorldInfo
+from game.components import Animation, Sprite, Transform, WorldInfo
 
 class WorldProcessor(Processor):
     def __init__(self, entity, player, scale):
@@ -89,8 +89,8 @@ class WorldProcessor(Processor):
 
         self.loaded_entities[(chunk_x, chunk_y)] = []
 
-        chunk_surface = pygame.Surface((int(constants.CHUNK_SIZE_PIXELS * self.scale),
-                                       int(constants.CHUNK_SIZE_PIXELS * self.scale)))
+        chunk_surface = pygame.Surface((int(constants.CHUNK_SIZE_PIXELS),
+                                       int(constants.CHUNK_SIZE_PIXELS)))
         for layout in chunk['layouts']:
             for y in range(0, constants.CHUNK_SIZE):
                 for x in range(0, constants.CHUNK_SIZE):
@@ -110,7 +110,7 @@ class WorldProcessor(Processor):
                                                 tile_size,
                                                 tile_size))
         
-        spr = Sprite(chunk_surface, pygame.Rect(0, 0, constants.CHUNK_SIZE_PIXELS, constants.CHUNK_SIZE_PIXELS), self.scale)
+        spr = Sprite(chunk_surface, pygame.Rect(0, 0, constants.CHUNK_SIZE_PIXELS * self.scale, constants.CHUNK_SIZE_PIXELS * self.scale))
         transform = Transform(Vector2(chunk_x * constants.CHUNK_SIZE_PIXELS * self.scale, chunk_y * constants.CHUNK_SIZE_PIXELS * self.scale),
                               Vector2(self.scale, self.scale))
         self.loaded_entities[(chunk_x, chunk_y)].append(self.world.create_entity(spr, transform))
