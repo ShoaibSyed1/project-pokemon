@@ -11,6 +11,7 @@ class UiController(Script):
     def __init__(self):
         self.mouse_x = 0
         self.mouse_y = 0
+        self.hold_tracking = set()
     
     def update(self, delta):
         pass
@@ -26,14 +27,20 @@ class UiController(Script):
                                 Vector2(event.pos[0] - transform.pos.x, event.pos[1] - transform.pos.y)))
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if is_inside(event.pos, transform.pos, element_size):
+                    self.hold_tracking.add(ent)
                     script_comp.script.on_ui_event(
                         UiEvent(UiEventType.MOUSE_DOWN,
                                 Vector2(event.pos[0] - transform.pos.x, event.pos[1] - transform.pos.y)))
             elif event.type == pygame.MOUSEBUTTONUP:
+                ui_event = UiEvent(UiEventType.MOUSE_UP,
+                    Vector2(event.pos[0] - transform.pos.x, event.pos[1] - transform.pos.y))
+                
+                for t_ent in self.hold_tracking:
+                    self.world.component_for_entity(t_ent, ScriptComponent).script.on_ui_event(ui_event)
+                self.hold_tracking.clear()
+
                 if is_inside(event.pos, transform.pos, element_size):
-                    script_comp.script.on_ui_event(
-                        UiEvent(UiEventType.MOUSE_UP,
-                                Vector2(event.pos[0] - transform.pos.x, event.pos[1] - transform.pos.y)))
+                    script_comp.script.on_ui_event(ui_event)
     
 
 def is_inside(mouse_pos, pos, size):

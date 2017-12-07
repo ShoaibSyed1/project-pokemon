@@ -1,0 +1,1 @@
+from game.loaders.sprite import *

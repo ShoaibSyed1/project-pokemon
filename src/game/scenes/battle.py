@@ -18,6 +18,7 @@ class Battle(Scene):
         
         from game.components import Animation, ScriptComponent, ScriptComponent, Sprite, Transform
         from game.components.ui import Element
+        from game.loaders import SpriteLoader
         from game.processors import AnimationProcessor, EventListener, EventProcessor, RenderProcessor, ScriptProcessor
         from game.scripts.ui import Button, UiController
 
@@ -30,11 +31,17 @@ class Battle(Scene):
             ScriptComponent(UiController())
         )
 
+        loader = SpriteLoader('ui/battle/button')
+        b_spr, b_anim, b_anim_groups = loader.load()
+
         self.world.create_entity(
-            Animation(64, 16, 32, 16, -1),
+            b_anim,
+            b_anim_groups,
+            b_spr,
+            #Animation(64, 16, 32, 16, -1),
             Element(Vector2(32, 16)),
             ScriptComponent(Button()),
-            Sprite(pygame.image.load("assets/ui/battle/button.png")),
+            #Sprite(pygame.image.load("assets/ui/battle/button.png")),
             Transform(Vector2(0, 416), scale=Vector2(5, 5))
         )
 
