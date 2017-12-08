@@ -1,5 +1,6 @@
 import pygame
 
+import game.data
 from game.scenes.battle import Battle
 from game.scenes.overworld import Overworld
 
