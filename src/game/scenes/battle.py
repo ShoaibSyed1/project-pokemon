@@ -34,21 +34,6 @@ class Battle(Scene):
         loader = UiLoader("battle/battle")
         loader.start(self.world)
 
-        """
-        loader = SpriteLoader('ui/battle/button')
-        b_spr, b_anim, b_anim_groups = loader.load()
-        
-        
-        self.world.create_entity(
-            b_anim,
-            b_anim_groups,
-            b_spr,
-            Element(Vector2(32, 16)),
-            ScriptComponent(Button()),
-            Transform(Vector2(0, 416), scale=Vector2(5, 5))
-        )
-        """
-
         self.world.add_processor(AnimationProcessor(), 2)
         self.world.add_processor(EventProcessor(self.game_info))
         self.world.add_processor(RenderProcessor(self.game.window, self.camera))

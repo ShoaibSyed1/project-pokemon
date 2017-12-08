@@ -35,7 +35,7 @@ class UiController(Script):
                 for r_ent in to_remove:
                     self.hover_tracking.remove(r_ent)
                 
-                if is_inside(event.pos, transform.pos, element_size):
+                if is_inside(event.pos, transform.pos, element_size) and len(self.hold_tracking) == 0:
                     self.hover_tracking.add(ent)
                     script_comp.script.on_ui_event(
                         UiEvent(UiEventType.MOUSE_ENTER,

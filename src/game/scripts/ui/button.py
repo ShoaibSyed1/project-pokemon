@@ -8,6 +8,9 @@ class Button(Script):
     def __init__(self):
         self.held = False
         self.inside = False
+
+        self.cb_press = None
+        self.cb_release = None
     
     def start(self):
         self.anim_groups = self.world.component_for_entity(self.entity, AnimationGroups)
@@ -32,6 +35,16 @@ class Button(Script):
             if not self.held:
                 self.anim_groups.current = 'up'
     
-    def on_press(self): pass
+    def on_press(self):
+        if self.cb_press != None:
+            self.cb_press()
     
-    def on_release(self): pass
+    def on_release(self):
+        if self.cb_release != None:
+            self.cb_release()
+    
+    def set_cb_press(self, cb_press):
+        self.cb_press = cb_press
+    
+    def set_cb_release(self, cb_release):
+        self.cb_release = cb_release

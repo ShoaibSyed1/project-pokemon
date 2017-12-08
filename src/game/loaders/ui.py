@@ -19,11 +19,11 @@ class UiLoader:
         entities = []
         
         for key, value in ui_info.items():
-            self.create(entities, value, world)
+            self.create(key, entities, value, world)
         
         return entities
 
-    def create(self, entities, value, world):
+    def create(self, name, entities, value, world):
         x = value['x']
         y = value['y']
         scale_x = value['scale_x']
@@ -31,7 +31,7 @@ class UiLoader:
         width = value['width']
         height = value['height']
 
-        element = Element(Vector2(width, height))
+        element = Element(name, Vector2(width, height))
         script_comp = None
         transform = Transform(Vector2(x, y), Vector2(scale_x, scale_y))
         
