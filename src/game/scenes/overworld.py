@@ -23,7 +23,8 @@ class Overworld(Scene):
 
         from pygame.math import Vector2
 
-        from game.components import Animation, AnimationGroup, AnimationGroups, InputComponent, Sprite, Transform, ScriptComponent, Tile, WorldInfo
+        from game.components import Animation, AnimationGroup, AnimationGroups, EventListener, InputComponent, Sprite, Transform, ScriptComponent, Tile, WorldInfo
+        from game.data import PlayerData
         from game.processors import AnimationProcessor, EventProcessor, RenderProcessor, ScriptProcessor, TileProcessor, WorldProcessor
         from game.scripts import PlayerScript
 
@@ -37,8 +38,9 @@ class Overworld(Scene):
 
         self.camera = self.world.create_entity(
             Transform(pos=Vector2(0, 0), scale=Vector2(2, 2)))
-
-        player_script = PlayerScript(self.camera)
+        
+        player_data = PlayerData("lol", "surface", Vector2(5, 5), [], [], [])
+        player_script = PlayerScript(self.camera, player_data)
 
         self.player = self.world.create_entity(
             Animation(48, 32, 16, 32, 200, 1, 3),
@@ -46,7 +48,8 @@ class Overworld(Scene):
                 'still': AnimationGroup(True, 0, 1, -1),
                 'walk_down': AnimationGroup(True, 1, 3, 100)
             }),
-            InputComponent([pygame.K_w, pygame.K_a, pygame.K_s, pygame.K_d]),
+            #InputComponent([pygame.K_w, pygame.K_a, pygame.K_s, pygame.K_d]),
+            EventListener([pygame.KEYDOWN, pygame.KEYUP]),
             Sprite(pygame.image.load("assets/player/player.png"), Rect(0, 0, 32, 64), layer=10),
             ScriptComponent(player_script),
             Tile(Vector2(0, 0), move_speed=1),
