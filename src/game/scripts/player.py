@@ -25,7 +25,7 @@ class PlayerScript(Script):
     
     def update(self, delta):
         if not self.tile.is_moving:
-            self.anim_groups.current = 'still'
+            self.anim_groups.current = 'walk_down'
             direction = self.move_tracker.peek()
             if direction != None:
                 self.tile.move_path.insert(0, direction)

@@ -43,14 +43,14 @@ class Overworld(Scene):
         player_script = PlayerScript(self.camera, player_data)
 
         self.player = self.world.create_entity(
-            Animation(48, 32, 16, 32, 200, 1, 3),
+            Animation(16, 20, 16, 20, 200, 0, 4),
             AnimationGroups('still', {
                 'still': AnimationGroup(True, 0, 1, -1),
-                'walk_down': AnimationGroup(True, 1, 3, 100)
+                'walk_down': AnimationGroup(True, 0, 1, 100)
             }),
             #InputComponent([pygame.K_w, pygame.K_a, pygame.K_s, pygame.K_d]),
             EventListener([pygame.KEYDOWN, pygame.KEYUP]),
-            Sprite(pygame.image.load("assets/player/player.png"), Rect(0, 0, 32, 64), layer=10),
+            Sprite(pygame.image.load("assets/sprites/players/james/overworld.png"), Rect(0, 0, 32, 40), layer=10),
             ScriptComponent(player_script),
             Tile(Vector2(0, 0), move_speed=1),
             Transform(pos=Vector2(64, 64), scale=Vector2(2, 2)))

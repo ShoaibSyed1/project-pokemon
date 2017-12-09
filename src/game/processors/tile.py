@@ -5,7 +5,7 @@ from pygame.math import Vector2
 from game.components import Direction, Tile, Transform
 
 class TileProcessor(Processor):
-    def __init__(self, tile_size=16):
+    def __init__(self, tile_size=32):
         self.tile_size = tile_size
     
     def process(self, delta):
