@@ -31,7 +31,7 @@ class UiLoader:
         width = value['width']
         height = value['height']
 
-        element = Element(name, Vector2(width, height))
+        element = Element(name, Vector2(width, height), Vector2(x, y))
         script_comp = None
         transform = Transform(Vector2(x, y), Vector2(scale_x, scale_y))
         

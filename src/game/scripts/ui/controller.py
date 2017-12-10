@@ -8,15 +8,21 @@ from game.components.ui import Element
 from game.scripts.script import Script
 
 class UiController(Script):
-    def __init__(self):
+    def __init__(self, camera_ent):
         self.mouse_x = 0
         self.mouse_y = 0
+
+        self.camera_ent = camera_ent
 
         self.hold_tracking = set()
         self.hover_tracking = set()
     
+    def start(self):
+        self.camera_transform = self.world.component_for_entity(self.camera_ent, Transform)
+    
     def update(self, delta):
-        pass
+        for ent, (element, transform) in self.world.get_components(Element, Transform):
+            transform.pos = Vector2(self.camera_transform.pos.x + element.pos.x, self.camera_transform.pos.y + element.pos.y)
     
     def on_event(self, event):
         for ent, (element, script_comp, transform) in self.world.get_components(Element, ScriptComponent, Transform):

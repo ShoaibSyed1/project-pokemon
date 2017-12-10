@@ -29,7 +29,7 @@ class RenderProcessor(Processor):
                      int(transform.scale.y * spr.surface.get_height())))
             
             draws.append((temp_surface, (transform.pos.x - camera_pos.pos.x,
-                                            transform.pos.y - camera_pos.pos.y), spr.bounds, spr.layer))
+                                            transform.pos.y - camera_pos.pos.y), spr.bounds, transform.layer))
         
         draws.sort(key=lambda x: x[3])
 

@@ -19,8 +19,7 @@ class SpriteLoader:
         y = sprite_info.get('y', 0)
         width = sprite_info.get('width', surface.get_width())
         height = sprite_info.get('height', surface.get_height())
-        layer = sprite_info.get('layer', 0)
-        sprite = Sprite(surface, pygame.Rect(x, y, width, height), layer)
+        sprite = Sprite(surface, pygame.Rect(x, y, width, height))
 
         animation = None
         animation_groups = None

@@ -14,6 +14,8 @@ class PlayerScript(Script):
         self.camera_entity = camera_entity
         self.data = data
 
+        self.can_move = True
+
         self.move_tracker = MoveTracker()
     
     def start(self):
@@ -25,9 +27,9 @@ class PlayerScript(Script):
     
     def update(self, delta):
         if not self.tile.is_moving:
-            self.anim_groups.current = 'walk_down'
+            self.anim_groups.current = 'still'
             direction = self.move_tracker.peek()
-            if direction != None:
+            if direction != None and self.can_move:
                 self.tile.move_path.insert(0, direction)
         else:
             if self.tile.move_dir == Direction.DOWN:

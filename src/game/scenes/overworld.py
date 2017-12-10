@@ -24,17 +24,19 @@ class Overworld(Scene):
         from pygame.math import Vector2
 
         from game.components import Animation, AnimationGroup, AnimationGroups, EventListener, InputComponent, Sprite, Transform, ScriptComponent, Tile, WorldInfo
+        from game.components.ui import Element
         from game.data import PlayerData
         from game.processors import AnimationProcessor, EventProcessor, RenderProcessor, ScriptProcessor, TileProcessor, WorldProcessor
         from game.scripts import PlayerScript
+        from game.scripts.ui import Textbox, UiController
 
         self.game_info = self.world.create_entity(GameInfo())
 
         self.world.create_entity(
             Animation(16, 16, 8, 8, 50, 0, 4),
             Sprite(pygame.image.load("assets/image.png")),
-            Tile(Vector2(33, 0)),
-            Transform(pos=Vector2(600, 3), scale=Vector2(8, 8)))
+            Tile(Vector2(5, 0)),
+            Transform(pos=Vector2(600, 3), scale=Vector2(8, 8), layer=10))
 
         self.camera = self.world.create_entity(
             Transform(pos=Vector2(0, 0), scale=Vector2(2, 2)))
@@ -48,12 +50,26 @@ class Overworld(Scene):
                 'still': AnimationGroup(True, 0, 1, -1),
                 'walk_down': AnimationGroup(True, 0, 1, 100)
             }),
-            #InputComponent([pygame.K_w, pygame.K_a, pygame.K_s, pygame.K_d]),
             EventListener([pygame.KEYDOWN, pygame.KEYUP]),
-            Sprite(pygame.image.load("assets/sprites/players/james/overworld.png"), Rect(0, 0, 32, 40), layer=10),
+            Sprite(pygame.image.load("assets/sprites/players/james/overworld.png"), Rect(0, 0, 32, 40)),
             ScriptComponent(player_script),
             Tile(Vector2(0, 0), move_speed=1),
-            Transform(pos=Vector2(64, 64), scale=Vector2(2, 2)))
+            Transform(pos=Vector2(64, 64), scale=Vector2(2, 2), layer=10))
+        
+        scr = Textbox(self.player)
+        
+        self.world.create_entity(
+            Element("textbox", Vector2(768, 144), Vector2(128, 400)),
+            EventListener([pygame.KEYDOWN, pygame.KEYUP]),
+            ScriptComponent(scr),
+            Sprite(pygame.image.load("assets/sprites/ui/textbox/textbox.png")),
+            Transform(pos=Vector2(128, 576-32), layer=10)
+        )
+        
+        self.world.create_entity(
+            EventListener([pygame.KEYDOWN, pygame.KEYUP, pygame.MOUSEBUTTONDOWN, pygame.MOUSEBUTTONUP, pygame.MOUSEMOTION]),
+            ScriptComponent(UiController(self.camera))
+        )
         
         world_info = self.world.create_entity(
             WorldInfo("surface")

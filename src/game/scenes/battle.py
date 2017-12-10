@@ -28,7 +28,7 @@ class Battle(Scene):
 
         self.world.create_entity(
             EventListener([pygame.KEYDOWN, pygame.KEYUP, pygame.MOUSEBUTTONDOWN, pygame.MOUSEBUTTONUP, pygame.MOUSEMOTION]),
-            ScriptComponent(UiController())
+            ScriptComponent(UiController(self.camera))
         )
 
         loader = UiLoader("battle/battle")
