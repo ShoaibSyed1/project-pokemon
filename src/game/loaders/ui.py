@@ -1,11 +1,12 @@
 import json
 
+import pygame
 from pygame.math import Vector2
 
-from game.components import ScriptComponent, Transform
+from game.components import EventListener, ScriptComponent, Transform
 from game.components.ui import Element
 from game.loaders.sprite import SpriteLoader
-from game.scripts.ui import Button
+from game.scripts.ui import Button, Textbox
 
 class UiLoader:
     def __init__(self, path):
@@ -51,4 +52,13 @@ class UiLoader:
                 anim_groups
             ))
         elif element_type == 'textbox':
-            pass
+            script_comp = ScriptComponent(Textbox())
+            entites.append(world.create_entity(
+                element,
+                EventListener([pygame.KEYDOWN, pygame.KEYUP, pygame.MOUSEBUTTONDOWN, pygame.MOUSEBUTTONUP, pygame.MOUSEMOTION]),
+                script_comp,
+                transform,
+                spr,
+                anim,
+                anim_groups
+            ))
