@@ -17,6 +17,7 @@ class WorldProcessor(Processor):
         self.scale = scale
         self.loaded_chunks = []
         self.loaded_entities = {}
+        self.loaded_objects = {}
     
     def process(self, delta):
         self.world_info = self.world.component_for_entity(self.world_info_entity, WorldInfo)
@@ -67,6 +68,9 @@ class WorldProcessor(Processor):
             if not old_chunk_pos in new_chunks_pos:
                 for entity in self.loaded_entities[old_chunk_pos]:
                     self.world.delete_entity(entity)
+                for obj in self.loaded_objects[old_chunk_pos]:
+                    if obj != None:
+                        self.world.delete_entity(obj)
                 self.loaded_entities[old_chunk_pos] = None
                 self.loaded_chunks.remove(old_chunk_pos)
         
@@ -114,3 +118,20 @@ class WorldProcessor(Processor):
         transform = Transform(Vector2(chunk_x * constants.CHUNK_SIZE_PIXELS * self.scale, chunk_y * constants.CHUNK_SIZE_PIXELS * self.scale),
                               Vector2(self.scale, self.scale))
         self.loaded_entities[(chunk_x, chunk_y)].append(self.world.create_entity(spr, transform))
+
+        objects = chunk['objects']
+        object_mappings = chunk['object_mappings']
+        for y in range(0, constants.CHUNK_SIZE):
+            for x in range(0, constants.CHUNK_SIZE):
+                obj_id = objects[y][x]
+                obj_info = object_mappings[str(obj_id)]
+
+                obj_x = int(chunk_x * constants.CHUNK_SIZE + x)
+                obj_y = int(chunk_y * constants.CHUNK_SIZE + y)
+
+                self.loaded_objects[(obj_x, obj_y)] = self.create_object(obj_info, obj_x, obj_y)
+
+    def create_object(self, obj_info, x, y):
+        obj_type = obj_info['type']
+        if obj_type == 'none':
+            return None
