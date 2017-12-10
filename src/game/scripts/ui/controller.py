@@ -21,7 +21,7 @@ class UiController(Script):
         self.camera_transform = self.world.component_for_entity(self.camera_ent, Transform)
     
     def update(self, delta):
-        for ent, (element, transform) in self.world.get_components(Element, Transform):
+        for ent, (element, transform) in self.world.get_components(Element, Transform)  :
             transform.pos = Vector2(self.camera_transform.pos.x + element.pos.x, self.camera_transform.pos.y + element.pos.y)
     
     def on_event(self, event):

@@ -4,6 +4,7 @@ import pygame
 from pygame.font import Font
 from pygame.math import Vector2
 
+from game import uuids
 from game.components import ScriptComponent, Sprite, Transform
 from game.components.ui import Element
 from game.scripts.script import Script
@@ -11,17 +12,16 @@ from game.scripts.script import Script
 TEXT_SIZE = 48
 
 class Textbox(Script):
-    def __init__(self, player):
+    def __init__(self):
         self.font = Font("assets/fonts/normal.ttf", TEXT_SIZE)
         self.text_entity = [None, None, None]
         self.state = TextboxState.OPENING
-
-        self.player_ent = player
     
     def start(self):
         self.element = self.world.component_for_entity(self.entity, Element)
         self.transform = self.world.component_for_entity(self.entity, Transform)
-
+        
+        self.player_ent = self.get_entity(uuids.PLAYER)
         self.player_script_comp = self.world.component_for_entity(self.player_ent, ScriptComponent)
         self.player_script_comp.script.can_move = False
 

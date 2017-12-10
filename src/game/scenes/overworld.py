@@ -23,7 +23,8 @@ class Overworld(Scene):
 
         from pygame.math import Vector2
 
-        from game.components import Animation, AnimationGroup, AnimationGroups, EventListener, InputComponent, Sprite, Transform, ScriptComponent, Tile, WorldInfo
+        from game import uuids
+        from game.components import Animation, AnimationGroup, AnimationGroups, EventListener, InputComponent, ScriptComponent, Sprite, Transform, Tile, Uuid, WorldInfo
         from game.components.ui import Element
         from game.data import PlayerData
         from game.processors import AnimationProcessor, EventProcessor, RenderProcessor, ScriptProcessor, TileProcessor, WorldProcessor
@@ -54,9 +55,10 @@ class Overworld(Scene):
             Sprite(pygame.image.load("assets/sprites/players/james/overworld.png"), Rect(0, 0, 32, 40)),
             ScriptComponent(player_script),
             Tile(Vector2(0, 0), move_speed=1),
-            Transform(pos=Vector2(64, 64), scale=Vector2(2, 2), layer=10))
+            Transform(pos=Vector2(64, 64), scale=Vector2(2, 2), layer=10),
+            Uuid(uuids.PLAYER))
         
-        scr = Textbox(self.player)
+        scr = Textbox()
         
         self.world.create_entity(
             Element("textbox", Vector2(768, 144), Vector2(128, 400)),

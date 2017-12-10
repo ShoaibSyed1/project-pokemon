@@ -6,4 +6,5 @@ from game.components.script import *
 from game.components.sprite import *
 from game.components.tile import *
 from game.components.transform import *
+from game.components.uuid import *
 from game.components.world import *
