@@ -3,21 +3,21 @@ from enum import Enum
 import pygame
 from pygame.math import Vector2
 
+from game import uuids
 from game.components import ScriptComponent, Transform
 from game.components.ui import Element
 from game.scripts.script import Script
 
 class UiController(Script):
-    def __init__(self, camera_ent):
+    def __init__(self):
         self.mouse_x = 0
         self.mouse_y = 0
-
-        self.camera_ent = camera_ent
 
         self.hold_tracking = set()
         self.hover_tracking = set()
     
     def start(self):
+        self.camera_ent = self.get_entity(uuids.CAMERA)
         self.camera_transform = self.world.component_for_entity(self.camera_ent, Transform)
     
     def update(self, delta):

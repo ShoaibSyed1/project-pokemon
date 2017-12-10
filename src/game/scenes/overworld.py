@@ -40,10 +40,11 @@ class Overworld(Scene):
             Transform(pos=Vector2(600, 3), scale=Vector2(8, 8), layer=10))
 
         self.camera = self.world.create_entity(
-            Transform(pos=Vector2(0, 0), scale=Vector2(2, 2)))
+            Transform(pos=Vector2(0, 0), scale=Vector2(2, 2)),
+            Uuid(uuids.CAMERA))
         
         player_data = PlayerData("lol", "surface", Vector2(5, 5), [], [], [])
-        player_script = PlayerScript(self.camera, player_data)
+        player_script = PlayerScript(player_data)
 
         self.player = self.world.create_entity(
             Animation(16, 20, 16, 20, 200, 0, 4),
@@ -70,7 +71,7 @@ class Overworld(Scene):
         
         self.world.create_entity(
             EventListener([pygame.KEYDOWN, pygame.KEYUP, pygame.MOUSEBUTTONDOWN, pygame.MOUSEBUTTONUP, pygame.MOUSEMOTION]),
-            ScriptComponent(UiController(self.camera))
+            ScriptComponent(UiController())
         )
         
         world_info = self.world.create_entity(

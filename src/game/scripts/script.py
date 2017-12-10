@@ -13,6 +13,11 @@ class Script:
 
     def get_entity(self, uuid):
         ents = list(filter(lambda x: x[1].uuid == uuid, self.world.get_component(Uuid)))
-        if len(ents) > 0:
+        if len(ents) == 1:
             return ents[0][0]
+        elif len(ents) > 1:
+            raise ConflictingUUIDError()
         return None
+
+class ConflictingUUIDError(Exception):
+    pass

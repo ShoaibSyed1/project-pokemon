@@ -16,7 +16,8 @@ class Battle(Scene):
         import pygame
         from pygame.math import Vector2
         
-        from game.components import Animation, ScriptComponent, ScriptComponent, Sprite, Transform
+        from game import uuids
+        from game.components import Animation, ScriptComponent, ScriptComponent, Sprite, Transform, Uuid
         from game.components.ui import Element
         from game.loaders import SpriteLoader, UiLoader
         from game.processors import AnimationProcessor, EventListener, EventProcessor, RenderProcessor, ScriptProcessor
@@ -24,11 +25,11 @@ class Battle(Scene):
 
         self.game_info = self.world.create_entity(GameInfo())
 
-        self.camera = self.world.create_entity(Transform(Vector2(0, 0)))
+        self.camera = self.world.create_entity(Transform(Vector2(0, 0)), Uuid(uuids.CAMERA))
 
         self.world.create_entity(
             EventListener([pygame.KEYDOWN, pygame.KEYUP, pygame.MOUSEBUTTONDOWN, pygame.MOUSEBUTTONUP, pygame.MOUSEMOTION]),
-            ScriptComponent(UiController(self.camera))
+            ScriptComponent(UiController())
         )
 
         loader = UiLoader("battle/battle")

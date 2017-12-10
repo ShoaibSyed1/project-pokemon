@@ -4,14 +4,14 @@ import pygame
 
 from pygame.math import Vector2
 
+from game import uuids
 from game.components import AnimationGroups, InputComponent
 from game.components.tile import Direction, Tile
 from game.components.transform import Transform
 from game.scripts.script import Script
 
 class PlayerScript(Script):
-    def __init__(self, camera_entity, data):
-        self.camera_entity = camera_entity
+    def __init__(self, data):
         self.data = data
 
         self.can_move = True
@@ -23,7 +23,8 @@ class PlayerScript(Script):
         self.tile = self.world.component_for_entity(self.entity, Tile)
         self.transform = self.world.component_for_entity(self.entity, Transform)
 
-        self.camera_transform = self.world.component_for_entity(self.camera_entity, Transform)
+        self.camera_ent = self.get_entity(uuids.CAMERA)
+        self.camera_transform = self.world.component_for_entity(self.camera_ent, Transform)
     
     def update(self, delta):
         if not self.tile.is_moving:
