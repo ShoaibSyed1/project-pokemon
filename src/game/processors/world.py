@@ -7,7 +7,7 @@ import pygame
 from pygame.math import Vector2
 
 from game import constants, paths
-from game.components import Animation, Sprite, Transform, WorldInfo
+from game.components import Animation, ScriptComponent, Sprite, Transform, WorldInfo
 
 class WorldProcessor(Processor):
     def __init__(self, entity, player, scale):
@@ -77,6 +77,11 @@ class WorldProcessor(Processor):
         for new_chunk_pos in new_chunks_pos:
             if not new_chunk_pos in self.loaded_chunks:
                 self.load_chunk(new_chunk_pos[0], new_chunk_pos[1])
+        
+        interact = self.world_info.interact
+        if interact != None:
+            self.interact(interact[0], interact[1], interact[2])
+            self.world_info.interact = None
     
     def load_chunk(self, chunk_x, chunk_y):
         self.loaded_chunks.append((chunk_x, chunk_y))
@@ -135,3 +140,8 @@ class WorldProcessor(Processor):
         obj_type = obj_info['type']
         if obj_type == 'none':
             return None
+    
+    def interact(self, x, y, player):
+        obj = self.loaded_objects.get((x, y), None)
+        if obj != None:
+            self.world.component_for_entity(obj, ScriptComponent).script.interact(player)

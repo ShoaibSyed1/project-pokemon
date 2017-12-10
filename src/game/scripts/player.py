@@ -8,6 +8,7 @@ from game import uuids
 from game.components import AnimationGroups, InputComponent
 from game.components.tile import Direction, Tile
 from game.components.transform import Transform
+from game.components.world import WorldInfo
 from game.scripts.script import Script
 
 class PlayerScript(Script):
@@ -25,6 +26,9 @@ class PlayerScript(Script):
 
         self.camera_ent = self.get_entity(uuids.CAMERA)
         self.camera_transform = self.world.component_for_entity(self.camera_ent, Transform)
+
+        self.world_ent = self.get_entity(uuids.WORLD)
+        self.world_info = self.world.component_for_entity(self.world_ent, WorldInfo)
     
     def update(self, delta):
         if not self.tile.is_moving:
@@ -48,6 +52,8 @@ class PlayerScript(Script):
                 self.move_tracker.hold(Direction.DOWN)
             elif event.key == pygame.K_d:
                 self.move_tracker.hold(Direction.RIGHT)
+            elif event.key == pygame.K_SPACE:
+                self.interact()
         elif event.type == pygame.KEYUP:
             if event.key == pygame.K_w:
                 self.move_tracker.release(Direction.UP)
@@ -57,6 +63,22 @@ class PlayerScript(Script):
                 self.move_tracker.release(Direction.DOWN)
             elif event.key == pygame.K_d:
                 self.move_tracker.release(Direction.RIGHT)
+    
+    def interact(self):
+        if self.can_move:
+            ix = self.tile.pos.x
+            iy = self.tile.pos.y
+
+            if self.tile.move_dir == Direction.UP:
+                iy -= 1
+            elif self.tile.move_dir == Direction.DOWN:
+                iy += 1
+            elif self.tile.move_dir == Direction.LEFT:
+                ix -= 1
+            elif self.tile.move_dir == Direction.RIGHT:
+                ix += 1
+            
+            self.world_info.interact = (int(ix), int(iy), self)
 
 class MoveTracker:
     def __init__(self):

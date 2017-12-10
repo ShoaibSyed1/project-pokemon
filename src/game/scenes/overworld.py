@@ -75,6 +75,7 @@ class Overworld(Scene):
         )
         
         world_info = self.world.create_entity(
+            Uuid(uuids.WORLD),
             WorldInfo("surface")
         )
 

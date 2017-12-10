@@ -4,3 +4,5 @@ class WorldInfo:
 
         self.info = None
         self.mappings = None
+
+        self.interact = None
