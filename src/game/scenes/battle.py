@@ -37,12 +37,7 @@ class Battle(Scene):
         self.world.add_processor(AnimationProcessor(), 2)
         self.world.add_processor(EventProcessor(self.game_info))
         self.world.add_processor(RenderProcessor(self.game.window, self.camera))
-        self.world.add_processor(ScriptProcessor())
-
-        for ent, script_comp in self.world.get_component(ScriptComponent):
-            script_comp.script.entity = ent
-            script_comp.script.world = self.world
-            script_comp.script.start()
+        self.world.add_processor(ScriptProcessor(), 3)
     
     def update(self, delta):
         self.game.running = self.world.component_for_entity(self.game_info, GameInfo).running

@@ -34,20 +34,21 @@ class UiLoader:
         element = Element(name, Vector2(width, height), Vector2(x, y))
         script_comp = None
         transform = Transform(Vector2(x, y), Vector2(scale_x, scale_y))
+
+        sprite_path = value['sprite']
+        sprite_loader = SpriteLoader(sprite_path)
+        spr, anim, anim_groups = sprite_loader.load()
         
         element_type = value['element']
         if element_type == 'button':
             script_comp = ScriptComponent(Button())
-        
-        sprite_path = value['sprite']
-        sprite_loader = SpriteLoader(sprite_path)
-        spr, anim, anim_groups = sprite_loader.load()
-
-        entities.append(world.create_entity(
-            element,
-            script_comp,
-            transform,
-            spr,
-            anim,
-            anim_groups
-        ))
+            entities.append(world.create_entity(
+                element,
+                script_comp,
+                transform,
+                spr,
+                anim,
+                anim_groups
+            ))
+        elif element_type == 'textbox':
+            pass

@@ -78,14 +78,9 @@ class Overworld(Scene):
         self.world.add_processor(AnimationProcessor(), 2)
         self.world.add_processor(EventProcessor(self.game_info))
         self.world.add_processor(RenderProcessor(self.game.window, self.camera))
-        self.world.add_processor(ScriptProcessor())
+        self.world.add_processor(ScriptProcessor(), 3)
         self.world.add_processor(TileProcessor())
         self.world.add_processor(WorldProcessor(world_info, self.player, self.scale))
-
-        for ent, script_comp in self.world.get_component(ScriptComponent):
-            script_comp.script.entity = ent
-            script_comp.script.world = self.world
-            script_comp.script.start()
 
     def update(self, delta):
         self.game.running = self.world.component_for_entity(self.game_info, GameInfo).running
