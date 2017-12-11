@@ -1,1 +1,1 @@
-from game.components.ui.element import *
+from game.components.ui.element import Element

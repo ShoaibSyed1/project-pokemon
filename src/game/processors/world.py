@@ -137,9 +137,20 @@ class WorldProcessor(Processor):
                 self.loaded_objects[(obj_x, obj_y)] = self.create_object(obj_info, obj_x, obj_y)
 
     def create_object(self, obj_info, x, y):
+        from game.components import Tile
+        from game.scripts import Npc, NpcType
+        
         obj_type = obj_info['type']
         if obj_type == 'none':
             return None
+        elif obj_type == 'npc':
+            npc_info = obj_info['info']
+
+            return self.world.create_entity(
+                ScriptComponent(Npc(NpcType[npc_info['type']], npc_info)),
+                Tile(Vector2(x, y)),
+                Transform()
+            )
     
     def interact(self, x, y, player):
         obj = self.loaded_objects.get((x, y), None)

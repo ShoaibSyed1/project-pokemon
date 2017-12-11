@@ -1,6 +1,6 @@
 import pygame
 
-from game.components import AnimationGroups, Transform
+from game.components import AnimationGroups
 from game.scripts.script import Script
 from game.scripts.ui.controller import UiEventType
 

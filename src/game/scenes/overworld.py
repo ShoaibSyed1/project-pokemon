@@ -62,14 +62,6 @@ class Overworld(Scene):
         scr = Textbox()
         
         self.world.create_entity(
-            Element("textbox", Vector2(768, 144), Vector2(128, 400)),
-            EventListener([pygame.KEYDOWN, pygame.KEYUP]),
-            ScriptComponent(scr),
-            Sprite(pygame.image.load("assets/sprites/ui/textbox/textbox.png")),
-            Transform(pos=Vector2(128, 576-32), layer=10)
-        )
-        
-        self.world.create_entity(
             EventListener([pygame.KEYDOWN, pygame.KEYUP, pygame.MOUSEBUTTONDOWN, pygame.MOUSEBUTTONUP, pygame.MOUSEMOTION]),
             ScriptComponent(UiController())
         )

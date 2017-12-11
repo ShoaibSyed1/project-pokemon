@@ -65,7 +65,7 @@ class PlayerScript(Script):
                 self.move_tracker.release(Direction.RIGHT)
     
     def interact(self):
-        if self.can_move:
+        if self.can_move and not self.tile.is_moving:
             ix = self.tile.pos.x
             iy = self.tile.pos.y
 

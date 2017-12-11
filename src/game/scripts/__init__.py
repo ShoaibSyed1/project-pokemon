@@ -1,2 +1,2 @@
-from game.scripts.player import *
-from game.scripts.script import *
+from game.scripts.npc import Npc, NpcType
+from game.scripts.player import PlayerScript

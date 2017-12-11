@@ -5,19 +5,26 @@ from pygame.font import Font
 from pygame.math import Vector2
 
 from game import uuids
-from game.components import ScriptComponent, Sprite, Transform
+from game.components import AnimationGroups, ScriptComponent, Sprite, Transform
 from game.components.ui import Element
 from game.scripts.script import Script
 
 TEXT_SIZE = 48
 
 class Textbox(Script):
-    def __init__(self):
+    def __init__(self, text=None, owner=None):
         self.font = Font("assets/fonts/normal.ttf", TEXT_SIZE)
+        self.owner_entity = None
         self.text_entity = [None, None, None]
         self.state = TextboxState.OPENING
+
+        self.scaler = 0.001
+
+        self.text = text
+        self.owner = owner
     
     def start(self):
+        self.anim = self.world.component_for_entity(self.entity, AnimationGroups)
         self.element = self.world.component_for_entity(self.entity, Element)
         self.transform = self.world.component_for_entity(self.entity, Transform)
         
@@ -25,25 +32,38 @@ class Textbox(Script):
         self.player_script_comp = self.world.component_for_entity(self.player_ent, ScriptComponent)
         self.player_script_comp.script.can_move = False
 
-        self.transform.scale = Vector2(0.1, 0.1)
+        self.transform.scale = Vector2(0.01, 0.01)
+
+        if self.owner != None:
+            self.anim.current = 'named'
     
     def update(self, delta):
         if self.state == TextboxState.OPENING:
             if self.transform.scale.x < 1:
-                self.transform.scale.x += 0.05
+                self.transform.scale.x += self.scaler
+                self.scaler += 0.005
                 self.transform.scale.y = self.transform.scale.x
 
             if self.transform.scale.x > 1:
-                self.transform.scale.x = 1.0
-                self.transform.scale.y = 1.0
-                self.state = TextboxState.READING
+                self.set_reading()
         elif self.state == TextboxState.CLOSING:
+            for i in range(0, 3):
+                if self.text_entity[i] != None:
+                    self.world.delete_entity(self.text_entity[i])
+                    self.text_entity[i] = None
+                if self.owner_entity != None:
+                    self.world.delete_entity(self.owner_entity)
+                    self.owner_entity = None
             if self.transform.scale.x <= 0.1:
                 self.world.delete_entity(self.entity)
                 self.player_script_comp.script.can_move = True
             else:
-                self.transform.scale.x -= 0.05
+                self.transform.scale.x -= self.scaler
+                self.scaler += 0.005
                 self.transform.scale.y = self.transform.scale.x
+                if self.transform.scale.x < 0:
+                    self.transform.scale.x = 0
+                    self.transform.scale.y = 0
     
     def on_event(self, event):
         if event.type == pygame.KEYDOWN:
@@ -57,18 +77,29 @@ class Textbox(Script):
         self.transform.scale.x = 1.0
         self.transform.scale.y = 1.0
         self.state = TextboxState.READING
+
+        if self.owner != None:
+            self.owner_entity = self.world.create_entity(
+                Element(self.element.name + "_owner", pos=Vector2(self.element.pos.x + 8, self.element.pos.y)),
+                Sprite(self.font.render(self.owner, False, (0, 0, 0))),
+                Transform(layer=25)
+            )
+
+        if self.text != None:
+            self.set_text(self.text)
     
     def set_closing(self):
         self.state = TextboxState.CLOSING
+        self.scaler = 0.001
     
     def set_text(self, lines):
         for i in range(0, 3):
             if self.text_entity[i] != None:
                 self.world.delete_entity(self.text_entity[i])
             self.text_entity[i] = self.world.create_entity(
-                Element(self.element.name + "_text" + str(i), pos=Vector2(self.element.pos.x + 8, self.element.pos.y + TEXT_SIZE * i)),
+                Element(self.element.name + "_text" + str(i), pos=Vector2(self.element.pos.x + 8, self.element.pos.y + TEXT_SIZE * i + 48)),
                 Sprite(self.font.render(lines[i], False, (0, 0, 0))),
-                Transform(Vector2(10, 10), layer=20)
+                Transform(layer=25)
             )
 
 class TextboxState(Enum):
