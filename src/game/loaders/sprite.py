@@ -25,7 +25,9 @@ class SpriteLoader:
         animation_groups = None
 
         animation_info = sprite_info.get('animation', None)
-        if animation_info != None:
+        if animation_info == None:
+            animation = Animation(width, height, width, height, -1, 0, 1)
+        else:
             s_width = animation_info.get('width', width)
             s_height = animation_info.get('height', height)
             delay = animation_info.get('delay', -1)

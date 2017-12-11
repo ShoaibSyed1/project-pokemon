@@ -138,6 +138,7 @@ class WorldProcessor(Processor):
 
     def create_object(self, obj_info, x, y):
         from game.components import Tile
+        from game.loaders import SpriteLoader
         from game.scripts import Npc, NpcType
         
         obj_type = obj_info['type']
@@ -145,11 +146,17 @@ class WorldProcessor(Processor):
             return None
         elif obj_type == 'npc':
             npc_info = obj_info['info']
+            
+            loader = SpriteLoader(npc_info['sprite'])
+            spr, anim, groups = loader.load()
 
             return self.world.create_entity(
                 ScriptComponent(Npc(NpcType[npc_info['type']], npc_info)),
                 Tile(Vector2(x, y)),
-                Transform()
+                Transform(scale=Vector2(2, 2)),
+                spr,
+                anim,
+                groups
             )
     
     def interact(self, x, y, player):

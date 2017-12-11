@@ -6,10 +6,14 @@ from game.components import Direction, Tile, Transform
 
 class TileProcessor(Processor):
     def __init__(self, tile_size=32):
+        self.collision_map = {}
         self.tile_size = tile_size
     
     def process(self, delta):
         for ent, (tile, transform) in self.world.get_components(Tile, Transform):
+            tile_pos = (tile.pos.x, tile.pos.y)
+            if self.collision_map.get(tile_pos, None) == None:
+                self.collision_map[tile_pos] = tile.solid
             if not tile.is_moving:
                 transform.pos = Vector2(tile.pos.x * self.tile_size, tile.pos.y * self.tile_size)
             if len(tile.move_path) > 0:
