@@ -17,6 +17,10 @@ class Textbox(Script):
         self.owner_entity = None
         self.text_entity = [None, None, None]
         self.state = TextboxState.OPENING
+        self.text_index = 0
+        self.text_max = 0
+        if text != None:
+            self.text_max = len(text)
 
         self.scaler = 0.001
 
@@ -71,7 +75,11 @@ class Textbox(Script):
                 if self.state == TextboxState.OPENING:
                     self.set_reading()
                 elif self.state == TextboxState.READING:
-                    self.set_closing()
+                    self.text_index += 1
+                    if self.text_index < self.text_max:
+                        self.set_text(self.text[self.text_index])
+                    else:
+                        self.set_closing()
     
     def set_reading(self):
         self.transform.scale.x = 1.0
@@ -86,7 +94,7 @@ class Textbox(Script):
             )
 
         if self.text != None:
-            self.set_text(self.text)
+            self.set_text(self.text[self.text_index])
     
     def set_closing(self):
         self.state = TextboxState.CLOSING
