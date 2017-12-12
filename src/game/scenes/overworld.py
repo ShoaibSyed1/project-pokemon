@@ -36,7 +36,9 @@ class Overworld(Scene):
         self.world.create_entity(
             Animation(16, 16, 8, 8, 50, 0, 4),
             Sprite(pygame.image.load("assets/image.png")),
-            Tile(Vector2(5, 0)),
+            Tile({
+                'pos': [5, 0]
+            }),
             Transform(pos=Vector2(600, 3), scale=Vector2(8, 8), layer=10))
 
         self.camera = self.world.create_entity(
@@ -57,7 +59,10 @@ class Overworld(Scene):
             }),
             Sprite(pygame.image.load("assets/sprites/players/james/overworld.png"), Rect(0, 0, 32, 40)),
             ScriptComponent(player_script),
-            Tile(Vector2(0, 0), move_speed=1),
+            Tile({
+                'pos': [0, 0],
+                'speed': 1
+            }),
             Transform(pos=Vector2(64, 64), scale=Vector2(2, 2), layer=10),
             Uuid(uuids.PLAYER))
         

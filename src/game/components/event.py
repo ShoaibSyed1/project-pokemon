@@ -10,4 +10,4 @@ EVENT_MAP = {
 
 class EventListener:
     def __init__(self, arg):
-        self.listen = list(map(lambda x: EVENT_MAP[x], arg['events']))
+        self.listen = list(map(lambda x: EVENT_MAP[x], arg.get('events', [])))

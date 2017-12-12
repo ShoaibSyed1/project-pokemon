@@ -152,7 +152,9 @@ class WorldProcessor(Processor):
 
             return self.world.create_entity(
                 ScriptComponent(Npc(NpcType[npc_info['type']], npc_info)),
-                Tile(Vector2(x, y)),
+                Tile({
+                    'pos': [x, y]
+                }),
                 TileObject(True),
                 Transform(scale=Vector2(2, 2)),
                 spr,
