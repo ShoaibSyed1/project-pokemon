@@ -55,7 +55,9 @@ class UiLoader:
             script_comp = ScriptComponent(Textbox())
             entites.append(world.create_entity(
                 element,
-                EventListener([pygame.KEYDOWN, pygame.KEYUP, pygame.MOUSEBUTTONDOWN, pygame.MOUSEBUTTONUP, pygame.MOUSEMOTION]),
+                EventListener({
+                    'events': ["KEYDOWN", "KEYUP", "MOUSEBUTTONDOWN", "MOUSEBUTTONUP", "MOUSEMOTION"]
+                }),
                 script_comp,
                 transform,
                 spr,

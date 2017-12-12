@@ -28,7 +28,9 @@ class Battle(Scene):
         self.camera = self.world.create_entity(Transform(Vector2(0, 0)), Uuid(uuids.CAMERA))
 
         self.world.create_entity(
-            EventListener([pygame.KEYDOWN, pygame.KEYUP, pygame.MOUSEBUTTONDOWN, pygame.MOUSEBUTTONUP, pygame.MOUSEMOTION]),
+            EventListener({
+                'events': ["KEYDOWN", "KEYUP", "MOUSEBUTTONDOWN", "MOUSEBUTTONUP", "MOUSEMOTION"]
+            }),
             ScriptComponent(UiController())
         )
 

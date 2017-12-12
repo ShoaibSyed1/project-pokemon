@@ -52,7 +52,9 @@ class Overworld(Scene):
                 'still': AnimationGroup(True, 0, 1, -1),
                 'walk_down': AnimationGroup(True, 0, 1, 100)
             }),
-            EventListener([pygame.KEYDOWN, pygame.KEYUP]),
+            EventListener({
+                'events': ["KEYDOWN", "KEYUP"]
+            }),
             Sprite(pygame.image.load("assets/sprites/players/james/overworld.png"), Rect(0, 0, 32, 40)),
             ScriptComponent(player_script),
             Tile(Vector2(0, 0), move_speed=1),
@@ -62,7 +64,9 @@ class Overworld(Scene):
         scr = Textbox()
         
         self.world.create_entity(
-            EventListener([pygame.KEYDOWN, pygame.KEYUP, pygame.MOUSEBUTTONDOWN, pygame.MOUSEBUTTONUP, pygame.MOUSEMOTION]),
+            EventListener({
+                'events': ["KEYDOWN", "KEYUP", "MOUSEBUTTONDOWN", "MOUSEBUTTONUP", "MOUSEMOTION"]
+            }),
             ScriptComponent(UiController())
         )
         

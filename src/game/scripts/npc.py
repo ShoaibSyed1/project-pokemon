@@ -29,7 +29,9 @@ class Npc(Script):
                         'named': AnimationGroup(False, 1, 2, -1)
                     }),
                     Element("textbox", Vector2(768, 192), Vector2(128, 352)),
-                    EventListener([pygame.KEYDOWN, pygame.KEYUP]),
+                    EventListener({
+                        'events': ["KEYDOWN", "KEYUP"]
+                    }),
                     ScriptComponent(textbox),
                     Sprite(pygame.image.load("assets/sprites/ui/textbox/textbox.png")),
                     Transform(layer=20)
