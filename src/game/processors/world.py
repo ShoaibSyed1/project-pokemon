@@ -1,4 +1,5 @@
 import json
+import random
 
 from esper import Processor
 
@@ -110,6 +111,10 @@ class WorldProcessor(Processor):
                 for x in range(0, constants.CHUNK_SIZE):
                     tile_id = layout[y][x]
                     tile_info = self.world_info.mappings[str(tile_id)]
+                    if isinstance(tile_info[0], list):
+                        weights = list(map(lambda x: x[2], tile_info))
+                        tile_info = random.choices(tile_info, weights)[0]
+                    
                     tileset_name = tile_info[0]
                     tile_name = tile_info[1]
 
