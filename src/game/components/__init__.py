@@ -13,6 +13,8 @@ class ComponentList:
 
 component_list = ComponentList()
 
+get = component_list.get
+
 from game.components.animation import Animation, AnimationGroup, AnimationGroups
 from game.components.event import EventListener
 from game.components.game_info import GameInfo

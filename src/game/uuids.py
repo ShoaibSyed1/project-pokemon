@@ -1,5 +1,9 @@
 import uuid
 
-PLAYER = uuid.uuid4()
-CAMERA = uuid.uuid4()
-WORLD = uuid.uuid4()
+uuids = {}
+
+def get(name):
+    if uuids.get(name, None) == None:
+        uuids[name] = uuid.uuid4()
+    
+    return uuids[name]

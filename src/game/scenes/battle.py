@@ -25,7 +25,7 @@ class Battle(Scene):
 
         self.game_info = self.world.create_entity(GameInfo())
 
-        self.camera = self.world.create_entity(Transform({'pos': Vector2(0, 0)}), Uuid(uuids.CAMERA))
+        self.camera = self.world.create_entity(Transform({'pos': Vector2(0, 0)}), Uuid(uuids.get('camera')))
 
         self.world.create_entity(
             EventListener({

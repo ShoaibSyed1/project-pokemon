@@ -17,7 +17,7 @@ class UiController(Script):
         self.hover_tracking = set()
     
     def start(self):
-        self.camera_ent = self.get_entity(uuids.CAMERA)
+        self.camera_ent = self.get_entity(uuids.get('camera'))
         self.camera_transform = self.world.component_for_entity(self.camera_ent, Transform)
     
     def update(self, delta):

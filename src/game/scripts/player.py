@@ -24,10 +24,10 @@ class PlayerScript(Script):
         self.tile = self.world.component_for_entity(self.entity, Tile)
         self.transform = self.world.component_for_entity(self.entity, Transform)
 
-        self.camera_ent = self.get_entity(uuids.CAMERA)
+        self.camera_ent = self.get_entity(uuids.get('camera'))
         self.camera_transform = self.world.component_for_entity(self.camera_ent, Transform)
 
-        self.world_ent = self.get_entity(uuids.WORLD)
+        self.world_ent = self.get_entity(uuids.get('world'))
         self.world_info = self.world.component_for_entity(self.world_ent, WorldInfo)
     
     def update(self, delta):

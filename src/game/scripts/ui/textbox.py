@@ -32,7 +32,7 @@ class Textbox(Script):
         self.element = self.world.component_for_entity(self.entity, Element)
         self.transform = self.world.component_for_entity(self.entity, Transform)
         
-        self.player_ent = self.get_entity(uuids.PLAYER)
+        self.player_ent = self.get_entity(uuids.get('player'))
         self.player_script_comp = self.world.component_for_entity(self.player_ent, ScriptComponent)
         self.player_script_comp.script.can_move = False
 

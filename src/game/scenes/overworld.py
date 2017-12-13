@@ -51,7 +51,7 @@ class Overworld(Scene):
                 'pos': Vector2(0, 0),
                 'scale': Vector2(2, 2)
             }),
-            Uuid(uuids.CAMERA))
+            Uuid(uuids.get('camera')))
         
         player_data = PlayerData("lol", "surface", Vector2(5, 5), [], [], [])
         player_script = PlayerScript(player_data)
@@ -76,7 +76,7 @@ class Overworld(Scene):
                 'scale': Vector2(2, 2),
                 'layer': 10
             }),
-            Uuid(uuids.PLAYER))
+            Uuid(uuids.get('player')))
         
         scr = Textbox()
         
@@ -88,7 +88,7 @@ class Overworld(Scene):
         )
         
         world_info = self.world.create_entity(
-            Uuid(uuids.WORLD),
+            Uuid(uuids.get('world')),
             WorldInfo("surface")
         )
 
