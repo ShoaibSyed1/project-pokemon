@@ -2,6 +2,7 @@ import json
 
 class EntityLoader:
     def load(path, world):
+        import game
         from game import components, uuids
         from game.loaders import SpriteLoader
 
@@ -17,10 +18,7 @@ class EntityLoader:
             with open(parent_path) as file:
                 parent_info = json.load(file)
             
-            for key, value in entity_info.items():
-                parent_info[key] = value
-            
-            entity_info = parent_info
+            entity_info = game.deepupdate(parent_info, entity_info)
         
         comps = []
         
