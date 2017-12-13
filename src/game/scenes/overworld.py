@@ -27,6 +27,7 @@ class Overworld(Scene):
         from game.components import Animation, AnimationGroup, AnimationGroups, EventListener, InputComponent, ScriptComponent, Sprite, Transform, Tile, Uuid, WorldInfo
         from game.components.ui import Element
         from game.data import PlayerData
+        from game.loaders import EntityLoader
         from game.processors import AnimationProcessor, EventProcessor, RenderProcessor, ScriptProcessor, TileProcessor, WorldProcessor
         from game.scripts import PlayerScript
         from game.scripts.ui import Textbox, UiController
@@ -56,7 +57,9 @@ class Overworld(Scene):
         player_data = PlayerData("lol", "surface", Vector2(5, 5), [], [], [])
         player_script = PlayerScript(player_data)
 
-        self.player = self.world.create_entity(
+        player_loader = EntityLoader("overworld/player")
+        self.player = player_loader.load(self.world)
+        """self.player = self.world.create_entity(
             Animation(16, 20, 16, 20, 200, 0, 4),
             AnimationGroups('still', {
                 'still': AnimationGroup(True, 0, 1, -1),
@@ -76,7 +79,7 @@ class Overworld(Scene):
                 'scale': Vector2(2, 2),
                 'layer': 10
             }),
-            Uuid(uuids.get('player')))
+            Uuid(uuids.get('player')))"""
         
         scr = Textbox()
         

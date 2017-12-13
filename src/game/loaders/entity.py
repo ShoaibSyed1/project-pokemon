@@ -23,6 +23,9 @@ class EntityLoader:
                 comps.append(anim_groups)
             elif key == 'uuid':
                 comps.append(components.get('uuid', uuids.get(value)))
+            elif key == 'script':
+                script_class = getattr(__import__("game.scripts" + value['path'], globals(), fromlist=[value['class']]), value['class'])
+                comps.append(components.get('script', script_class(value['args'])))
             else:
                 comps.append(components.get(key, value))
         
