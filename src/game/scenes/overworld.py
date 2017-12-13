@@ -16,91 +16,32 @@ class Overworld(Scene):
         self.player = None
 
         self.scale = 2
-
     
     def start(self):
         from pygame import Rect
 
         from pygame.math import Vector2
 
-        from game import uuids
-        from game.components import Animation, AnimationGroup, AnimationGroups, EventListener, InputComponent, ScriptComponent, Sprite, Transform, Tile, Uuid, WorldInfo
-        from game.components.ui import Element
         from game.data import PlayerData
         from game.loaders import EntityLoader
         from game.processors import AnimationProcessor, EventProcessor, RenderProcessor, ScriptProcessor, TileProcessor, WorldProcessor
-        from game.scripts import PlayerScript
-        from game.scripts.ui import Textbox, UiController
 
         self.game_info = self.world.create_entity(GameInfo())
-
-        self.world.create_entity(
-            Animation(16, 16, 8, 8, 50, 0, 4),
-            Sprite(pygame.image.load("assets/image.png")),
-            Tile({
-                'pos': [5, 0]
-            }),
-            Transform({
-                'pos': Vector2(600, 3),
-                'scale': Vector2(8, 8),
-                'layer': 10
-            })
-        )
-
-        self.camera = self.world.create_entity(
-            Transform({
-                'pos': Vector2(0, 0),
-                'scale': Vector2(2, 2)
-            }),
-            Uuid(uuids.get('camera')))
         
         player_data = PlayerData("lol", "surface", Vector2(5, 5), [], [], [])
-        player_script = PlayerScript(player_data)
-
-        player_loader = EntityLoader("overworld/player")
-        self.player = player_loader.load(self.world)
-        """self.player = self.world.create_entity(
-            Animation(16, 20, 16, 20, 200, 0, 4),
-            AnimationGroups('still', {
-                'still': AnimationGroup(True, 0, 1, -1),
-                'walk_down': AnimationGroup(True, 0, 1, 100)
-            }),
-            EventListener({
-                'events': ["KEYDOWN", "KEYUP"]
-            }),
-            Sprite(pygame.image.load("assets/sprites/players/james/overworld.png"), Rect(0, 0, 32, 40)),
-            ScriptComponent(player_script),
-            Tile({
-                'pos': [0, 0],
-                'speed': 1
-            }),
-            Transform({
-                'pos': Vector2(64, 64),
-                'scale': Vector2(2, 2),
-                'layer': 10
-            }),
-            Uuid(uuids.get('player')))"""
         
-        scr = Textbox()
-        
-        self.world.create_entity(
-            EventListener({
-                'events': ["KEYDOWN", "KEYUP", "MOUSEBUTTONDOWN", "MOUSEBUTTONUP", "MOUSEMOTION"]
-            }),
-            ScriptComponent(UiController())
-        )
-        
-        world_info = self.world.create_entity(
-            Uuid(uuids.get('world')),
-            WorldInfo("surface")
-        )
+        self.camera = EntityLoader.load("camera", self.world)
+        player = EntityLoader.load("overworld/player", self.world)
+        world_info = EntityLoader.load("overworld/world_info", self.world)
+        EntityLoader.load("overworld/random", self.world)
+        EntityLoader.load("ui_controller", self.world)
 
         self.world.add_processor(AnimationProcessor(), 2)
         self.world.add_processor(EventProcessor(self.game_info))
         self.world.add_processor(RenderProcessor(self.game.window, self.camera))
         self.world.add_processor(ScriptProcessor(), 3)
         self.world.add_processor(TileProcessor())
-        self.world.add_processor(WorldProcessor(world_info, self.player, self.scale))
+        self.world.add_processor(WorldProcessor(world_info, player, self.scale))
 
     def update(self, delta):
         self.game.running = self.world.component_for_entity(self.game_info, GameInfo).running
