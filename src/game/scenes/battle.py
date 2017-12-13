@@ -13,26 +13,13 @@ class Battle(Scene):
         self.game_info = None
     
     def start(self):
-        import pygame
-        from pygame.math import Vector2
-        
-        from game import uuids
-        from game.components import Animation, ScriptComponent, ScriptComponent, Sprite, Transform, Uuid
-        from game.components.ui import Element
-        from game.loaders import SpriteLoader, UiLoader
-        from game.processors import AnimationProcessor, EventListener, EventProcessor, RenderProcessor, ScriptProcessor
-        from game.scripts.ui import Button, UiController
+        from game.loaders import EntityLoader, UiLoader
+        from game.processors import AnimationProcessor, EventProcessor, RenderProcessor, ScriptProcessor
 
         self.game_info = self.world.create_entity(GameInfo())
 
-        self.camera = self.world.create_entity(Transform({'pos': Vector2(0, 0)}), Uuid(uuids.get('camera')))
-
-        self.world.create_entity(
-            EventListener({
-                'events': ["KEYDOWN", "KEYUP", "MOUSEBUTTONDOWN", "MOUSEBUTTONUP", "MOUSEMOTION"]
-            }),
-            ScriptComponent(UiController())
-        )
+        self.camera = EntityLoader.load("camera", self.world)
+        EntityLoader.load("ui_controller", self.world)
 
         loader = UiLoader("battle/battle")
         loader.start(self.world)

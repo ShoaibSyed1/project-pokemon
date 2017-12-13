@@ -18,17 +18,10 @@ class Overworld(Scene):
         self.scale = 2
     
     def start(self):
-        from pygame import Rect
-
-        from pygame.math import Vector2
-
-        from game.data import PlayerData
         from game.loaders import EntityLoader
         from game.processors import AnimationProcessor, EventProcessor, RenderProcessor, ScriptProcessor, TileProcessor, WorldProcessor
 
         self.game_info = self.world.create_entity(GameInfo())
-        
-        player_data = PlayerData("lol", "surface", Vector2(5, 5), [], [], [])
         
         self.camera = EntityLoader.load("camera", self.world)
         player = EntityLoader.load("overworld/player", self.world)
