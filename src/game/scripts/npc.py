@@ -34,7 +34,7 @@ class Npc(Script):
                     }),
                     ScriptComponent(textbox),
                     Sprite(pygame.image.load("assets/sprites/ui/textbox/textbox.png")),
-                    Transform(layer=20)
+                    Transform({'layer': 20})
                 )
 
 class NpcType(Enum):

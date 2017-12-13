@@ -120,8 +120,10 @@ class WorldProcessor(Processor):
                                                 tile_size))
         
         spr = Sprite(chunk_surface, pygame.Rect(0, 0, constants.CHUNK_SIZE_PIXELS * self.scale, constants.CHUNK_SIZE_PIXELS * self.scale))
-        transform = Transform(Vector2(chunk_x * constants.CHUNK_SIZE_PIXELS * self.scale, chunk_y * constants.CHUNK_SIZE_PIXELS * self.scale),
-                              Vector2(self.scale, self.scale))
+        transform = Transform({
+            'pos': Vector2(chunk_x * constants.CHUNK_SIZE_PIXELS * self.scale, chunk_y * constants.CHUNK_SIZE_PIXELS * self.scale),
+            'scale': Vector2(self.scale, self.scale)
+        })
         self.loaded_entities[(chunk_x, chunk_y)].append(self.world.create_entity(spr, transform))
 
         objects = chunk['objects']
@@ -156,7 +158,9 @@ class WorldProcessor(Processor):
                     'pos': [x, y]
                 }),
                 TileObject(True),
-                Transform(scale=Vector2(2, 2)),
+                Transform({
+                    'scale': Vector2(2, 2)
+                }),
                 spr,
                 anim,
                 groups

@@ -34,7 +34,10 @@ class UiLoader:
 
         element = Element(name, Vector2(width, height), Vector2(x, y))
         script_comp = None
-        transform = Transform(Vector2(x, y), Vector2(scale_x, scale_y))
+        transform = Transform({
+            'pos': Vector2(x, y),
+            'scale': Vector2(scale_x, scale_y)
+        })
 
         sprite_path = value['sprite']
         sprite_loader = SpriteLoader(sprite_path)

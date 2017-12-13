@@ -39,10 +39,18 @@ class Overworld(Scene):
             Tile({
                 'pos': [5, 0]
             }),
-            Transform(pos=Vector2(600, 3), scale=Vector2(8, 8), layer=10))
+            Transform({
+                'pos': Vector2(600, 3),
+                'scale': Vector2(8, 8),
+                'layer': 10
+            })
+        )
 
         self.camera = self.world.create_entity(
-            Transform(pos=Vector2(0, 0), scale=Vector2(2, 2)),
+            Transform({
+                'pos': Vector2(0, 0),
+                'scale': Vector2(2, 2)
+            }),
             Uuid(uuids.CAMERA))
         
         player_data = PlayerData("lol", "surface", Vector2(5, 5), [], [], [])
@@ -63,7 +71,11 @@ class Overworld(Scene):
                 'pos': [0, 0],
                 'speed': 1
             }),
-            Transform(pos=Vector2(64, 64), scale=Vector2(2, 2), layer=10),
+            Transform({
+                'pos': Vector2(64, 64),
+                'scale': Vector2(2, 2),
+                'layer': 10
+            }),
             Uuid(uuids.PLAYER))
         
         scr = Textbox()
