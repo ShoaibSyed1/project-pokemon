@@ -2,18 +2,21 @@ import json
 
 class EntityLoader:
     def load(path, world):
-        import game
-        from game import components, uuids
-        from game.loaders import SpriteLoader
-
         path = "assets/entities/" + path + ".json"
 
         entity_info = None
         with open(path) as file:
             entity_info = json.load(file)
         
+        return EntityLoader.load_from(entity_info, world)
+
+    def load_from(entity_info, world):
+        import game
+        from game import components, uuids
+        from game.loaders import SpriteLoader
+        
         if entity_info.get('parent', None) != None:
-            parent_path = entity_info['parent']
+            parent_path = "assets/entities/" + entity_info['parent'] + ".json"
             parent_info = None
             with open(parent_path) as file:
                 parent_info = json.load(file)
@@ -39,6 +42,8 @@ class EntityLoader:
                 else:
                     script = script_class()
                 comps.append(components.get('script', script))
+            elif key == 'parent':
+                continue
             else:
                 comps.append(components.get(key, value))
         

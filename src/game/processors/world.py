@@ -6,20 +6,25 @@ import pygame
 
 from pygame.math import Vector2
 
-from game import constants, paths
+from game import constants, paths, uuids
 from game.components import Animation, ScriptComponent, Sprite, Transform, WorldInfo
 
 class WorldProcessor(Processor):
-    def __init__(self, entity, player, scale):
-        self.world_info_entity = entity
-        self.player = player
+    def __init__(self):
+        self.world_info_entity = None
+        self.player = None
         self.tilesets = {}
-        self.scale = scale
+        self.scale = 2
         self.loaded_chunks = []
         self.loaded_entities = {}
         self.loaded_objects = {}
     
     def process(self, delta):
+        if self.player == None:
+            self.player = self.get_entity(uuids.get('player'))
+        if self.world_info_entity == None:
+            self.world_info_entity = self.get_entity(uuids.get('world'))
+        
         self.world_info = self.world.component_for_entity(self.world_info_entity, WorldInfo)
 
         if self.world_info.info == None:
@@ -170,3 +175,15 @@ class WorldProcessor(Processor):
         obj = self.loaded_objects.get((x, y), None)
         if obj != None:
             self.world.component_for_entity(obj, ScriptComponent).script.interact(player)
+    
+    def get_entity(self, uuid):
+        from game.components import Uuid
+        ents = list(filter(lambda x: x[1].uuid == uuid, self.world.get_component(Uuid)))
+        if len(ents) == 1:
+            return ents[0][0]
+        elif len(ents) > 1:
+            raise ConflictingUUIDError()
+        return None
+
+class ConflictingUUIDError(Exception):
+    pass

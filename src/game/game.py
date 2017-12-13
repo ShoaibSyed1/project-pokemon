@@ -1,8 +1,7 @@
 import pygame
 
 import game.data
-from game.scenes.battle import Battle
-from game.scenes.overworld import Overworld
+from game.scene import Scene
 
 class Game:
     def __init__(self):
@@ -13,7 +12,7 @@ class Game:
         self.clock = pygame.time.Clock()
         self.delta = 0
 
-        self.scene = Overworld(self)
+        self.scene = Scene(self, 'overworld')
 
         self.running = False
     

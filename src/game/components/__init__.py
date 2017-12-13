@@ -3,10 +3,7 @@ class ComponentList:
         self.comps = {}
     
     def register(self, comp, name):
-        if self.comps.get(name, None) != None:
-            raise Exception()
-        else:
-            self.comps[name] = comp
+        self.comps[name] = comp
     
     def get(self, name, arg):
         return self.comps[name](arg)

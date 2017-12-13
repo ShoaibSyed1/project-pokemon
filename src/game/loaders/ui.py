@@ -12,7 +12,7 @@ class UiLoader:
     def __init__(self, path):
         self.path = "assets/ui/" + path + ".json"
     
-    def start(self, world):
+    def load(self, world):
         ui_info = None
         with open(self.path) as file:
             ui_info = json.load(file)
