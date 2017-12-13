@@ -157,7 +157,7 @@ class WorldProcessor(Processor):
                 Tile({
                     'pos': [x, y]
                 }),
-                TileObject(True),
+                TileObject({'is_solid': True}),
                 Transform({
                     'scale': Vector2(2, 2)
                 }),

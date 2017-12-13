@@ -1,4 +1,4 @@
 
 class TileObject:
-    def __init__(self, is_solid=False):
-        self.is_solid = is_solid
+    def __init__(self, arg):
+        self.is_solid = bool(arg['is_solid'])
