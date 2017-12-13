@@ -8,13 +8,24 @@ class EntityLoader:
         from game import components, uuids
         from game.loaders import SpriteLoader
 
-        entity_json = None
+        entity_info = None
         with open(self.path) as file:
-            entity_json = json.load(file)
+            entity_info = json.load(file)
+        
+        if entity_info.get('parent', None) != None:
+            parent_path = entity_info['parent']
+            parent_info = None
+            with open(parent_path) as file:
+                parent_info = json.load(file)
+            
+            for key, value in entity_info.items():
+                parent_info[key] = value
+            
+            entity_info = parent_info
         
         comps = []
         
-        for key, value in entity_json.items():
+        for key, value in entity_info.items():
             if key == 'sprite':
                 sprite_loader = SpriteLoader(value)
                 sprite, anim, anim_groups = sprite_loader.load()
