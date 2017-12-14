@@ -7,17 +7,21 @@ from pygame.math import Vector2
 from game import uuids
 from game.components import AnimationGroups, ScriptComponent, Sprite, Transform
 from game.components.ui import Element
+from game.loaders import TextLoader
 from game.scripts.script import Script
 
 TEXT_SIZE = 48
 
 class Textbox(Script):
-    def __init__(self, text=None):
+    def __init__(self, text_path=None):
         self.font = Font("assets/fonts/normal.ttf", TEXT_SIZE)
         
         self.state = TextboxState.OPENING
         self.text_index = 0
         self.text_max = 0
+
+        text = TextLoader.load(text_path[0], text_path[1])
+
         if text != None:
             self.text_max = len(text)
         
