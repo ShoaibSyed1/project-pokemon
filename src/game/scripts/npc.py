@@ -20,8 +20,7 @@ class Npc(Script):
         if on_interact != None:
             if on_interact['type'] == 'textbox':
                 text = on_interact['text']
-                owner = on_interact.get('owner', None)
-                textbox = Textbox(text, owner)
+                textbox = Textbox(text)
                 self.world.create_entity(
                     Animation(1536, 192, 768, 192, -1),
                     AnimationGroups('noname', {

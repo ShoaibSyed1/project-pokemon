@@ -12,20 +12,21 @@ from game.scripts.script import Script
 TEXT_SIZE = 48
 
 class Textbox(Script):
-    def __init__(self, text=None, owner=None):
+    def __init__(self, text=None):
         self.font = Font("assets/fonts/normal.ttf", TEXT_SIZE)
-        self.owner_entity = None
-        self.text_entity = [None, None, None]
+        
         self.state = TextboxState.OPENING
         self.text_index = 0
         self.text_max = 0
         if text != None:
             self.text_max = len(text)
+        
+        self.owner_entity = None
+        self.text_entity = [None, None, None]
 
         self.scaler = 0.001
 
         self.text = text
-        self.owner = owner
     
     def start(self):
         self.anim = self.world.component_for_entity(self.entity, AnimationGroups)
@@ -37,9 +38,6 @@ class Textbox(Script):
         self.player_script_comp.script.can_move = False
 
         self.transform.scale = Vector2(0.01, 0.01)
-
-        if self.owner != None:
-            self.anim.current = 'named'
     
     def update(self, delta):
         if self.state == TextboxState.OPENING:
@@ -77,7 +75,21 @@ class Textbox(Script):
                 elif self.state == TextboxState.READING:
                     self.text_index += 1
                     if self.text_index < self.text_max:
-                        self.set_text(self.text[self.text_index])
+                        self.set_text(self.text[self.text_index][1:4])
+
+                        if self.owner_entity != None:
+                            self.world.delete_entity(self.owner_entity)
+                            self.owner_entity = None
+                        owner = self.text[self.text_index][0]
+                        if owner != None:
+                            self.owner_entity = self.world.create_entity(
+                                Element(self.element.name + "_owner", pos=Vector2(self.element.pos.x + 8, self.element.pos.y)),
+                                Sprite(self.font.render(owner, False, (0, 0, 0))),
+                                Transform({'layer': 25})
+                            )
+                            self.anim.current = 'named'
+                        else:
+                            self.anim.current = 'noname'
                     else:
                         self.set_closing()
     
@@ -86,15 +98,19 @@ class Textbox(Script):
         self.transform.scale.y = 1.0
         self.state = TextboxState.READING
 
-        if self.owner != None:
+        owner = self.text[self.text_index][0]
+        if owner != None:
             self.owner_entity = self.world.create_entity(
                 Element(self.element.name + "_owner", pos=Vector2(self.element.pos.x + 8, self.element.pos.y)),
-                Sprite(self.font.render(self.owner, False, (0, 0, 0))),
+                Sprite(self.font.render(owner, False, (0, 0, 0))),
                 Transform({'layer': 25})
             )
+            self.anim.current = 'named'
+        else:
+            self.anim.current = 'noname'
 
         if self.text != None:
-            self.set_text(self.text[self.text_index])
+            self.set_text(self.text[self.text_index][1:4])
     
     def set_closing(self):
         self.state = TextboxState.CLOSING

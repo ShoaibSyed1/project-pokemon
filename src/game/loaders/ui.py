@@ -55,6 +55,7 @@ class UiLoader:
                 anim_groups
             ))
         elif element_type == 'textbox':
+            #TODO
             script_comp = ScriptComponent(Textbox())
             entites.append(world.create_entity(
                 element,
