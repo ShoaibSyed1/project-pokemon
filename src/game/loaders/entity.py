@@ -1,16 +1,16 @@
 import json
 
 class EntityLoader:
-    def load(path, world):
+    def load(path, world, merge=None):
         path = "assets/entities/" + path + ".json"
 
         entity_info = None
         with open(path) as file:
             entity_info = json.load(file)
         
-        return EntityLoader.load_from(entity_info, world)
+        return EntityLoader.load_from(entity_info, world, merge)
 
-    def load_from(entity_info, world):
+    def load_from(entity_info, world, merge=None):
         import game
         from game import components, uuids
         from game.loaders import SpriteLoader
@@ -22,6 +22,9 @@ class EntityLoader:
                 parent_info = json.load(file)
             
             entity_info = game.deepupdate(parent_info, entity_info)
+        
+        if merge != None:
+            entity_info = game.deepupdate(entity_info, merge)
         
         comps = []
         

@@ -83,7 +83,10 @@ class Textbox(Script):
                         owner = self.text[self.text_index][0]
                         if owner != None:
                             self.owner_entity = self.world.create_entity(
-                                Element(self.element.name + "_owner", pos=Vector2(self.element.pos.x + 8, self.element.pos.y)),
+                                Element({
+                                    'name': self.element.name + "_owner",
+                                    'pos': Vector2(self.element.pos.x + 8, self.element.pos.y)
+                                }),
                                 Sprite(self.font.render(owner, False, (0, 0, 0))),
                                 Transform({'layer': 25})
                             )
@@ -101,7 +104,10 @@ class Textbox(Script):
         owner = self.text[self.text_index][0]
         if owner != None:
             self.owner_entity = self.world.create_entity(
-                Element(self.element.name + "_owner", pos=Vector2(self.element.pos.x + 8, self.element.pos.y)),
+                Element({
+                    'name': self.element.name + "_owner",
+                    'pos': Vector2(self.element.pos.x + 8, self.element.pos.y)
+                }),
                 Sprite(self.font.render(owner, False, (0, 0, 0))),
                 Transform({'layer': 25})
             )
@@ -121,7 +127,10 @@ class Textbox(Script):
             if self.text_entity[i] != None:
                 self.world.delete_entity(self.text_entity[i])
             self.text_entity[i] = self.world.create_entity(
-                Element(self.element.name + "_text" + str(i), pos=Vector2(self.element.pos.x + 8, self.element.pos.y + TEXT_SIZE * i + 48)),
+                Element({
+                    'name': self.element.name + "_text" + str(i),
+                    'pos': Vector2(self.element.pos.x + 8, self.element.pos.y + TEXT_SIZE * i + 48)
+                }),
                 Sprite(self.font.render(lines[i], False, (0, 0, 0))),
                 Transform({'layer': 25})
             )

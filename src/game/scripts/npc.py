@@ -15,26 +15,15 @@ class Npc(Script):
 
     def interact(self, player):
         from game.components import EventListener, ScriptComponent, Sprite, Transform
+        from game.loaders import EntityLoader
 
         on_interact = self.npc_info.get('on_interact', None)
         if on_interact != None:
             if on_interact['type'] == 'textbox':
                 text = on_interact['text']
-                textbox = Textbox(text)
-                self.world.create_entity(
-                    Animation(1536, 192, 768, 192, -1),
-                    AnimationGroups('noname', {
-                        'noname': AnimationGroup(False, 0, 1, -1),
-                        'named': AnimationGroup(False, 1, 2, -1)
-                    }),
-                    Element("textbox", Vector2(768, 192), Vector2(128, 352)),
-                    EventListener({
-                        'events': ["KEYDOWN", "KEYUP"]
-                    }),
-                    ScriptComponent(textbox),
-                    Sprite(pygame.image.load("assets/sprites/ui/textbox/textbox.png")),
-                    Transform({'layer': 20})
-                )
+                merge = { 'script': { 'args': text } }
+
+                EntityLoader.load("overworld/ui/textbox", self.world, merge)
 
 class NpcType(Enum):
     STILL = 0

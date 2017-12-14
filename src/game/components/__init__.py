@@ -24,6 +24,8 @@ from game.components.transform import Transform
 from game.components.uuid import Uuid
 from game.components.world import WorldInfo
 
+from game.components.ui import Element
+
 component_list.register(EventListener, 'event_listener')
 component_list.register(GameInfo, 'game_info')
 component_list.register(InputComponent, 'input')
@@ -34,3 +36,5 @@ component_list.register(TileObject, 'tile_object')
 component_list.register(Transform, 'transform')
 component_list.register(Uuid, 'uuid')
 component_list.register(WorldInfo, 'world_info')
+
+component_list.register(Element, 'element')
