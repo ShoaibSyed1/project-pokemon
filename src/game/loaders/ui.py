@@ -40,7 +40,8 @@ class UiLoader:
         script_comp = None
         transform = Transform({
             'pos': Vector2(x, y),
-            'scale': Vector2(scale_x, scale_y)
+            'scale': Vector2(scale_x, scale_y),
+            'layer': 20
         })
 
         sprite_path = value['sprite']

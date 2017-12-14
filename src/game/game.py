@@ -12,7 +12,7 @@ class Game:
         self.clock = pygame.time.Clock()
         self.delta = 0
 
-        self.scene = Scene(self, 'overworld')
+        self.scene = Scene(self, 'battle')
 
         self.running = False
     
