@@ -6,18 +6,16 @@ from game.scripts.script import Script
 class BattleController(Script):
     def __init__(self, battle_info):
         self.battle_info = battle_info
-        self.state = BattleState.INITIALIZING
+        self.state = BattleState.WAITING
 
     def start(self):
-        pass
+        self.pokemon_front = EntityLoader.load("battle/front", self.world,
+                              {'sprite': "pokemon/battle/" + self.battle_info['front_info']['pokemon']})
+        self.pokemon_back = EntityLoader.load("battle/back", self.world,
+                              {'sprite': "pokemon/battle/" + self.battle_info['front_info']['pokemon']})
     
     def update(self, delta):
-        if self.state == BattleState.INITIALIZING:
-            self.pokemon_front = self.world.create_entity()
-            EntityLoader.load("battle/front", self.world,
-                                                   {'sprite': "pokemon/battle/" + self.battle_info['front_info']['pokemon']})
-            self.state = BattleState.WAITING
+        pass
 
 class BattleState(Enum):
-    INITIALIZING = 0
-    WAITING = 1
+    WAITING = 0
