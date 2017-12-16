@@ -6,6 +6,9 @@ from game.components import Transform
 from game.scripts.script import Script
 
 class PokemonScript(Script):
+    def __init__(self):
+        self.state = PokemonState.NORMAL
+    
     def start(self):
         self.transform = self.world.component_for_entity(self.entity, Transform)
     

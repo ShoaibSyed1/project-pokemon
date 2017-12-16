@@ -7,7 +7,9 @@ class ScriptProcessor(Processor):
         pass
     
     def process(self, delta):
-        for ent, script_comp in self.world.get_component(ScriptComponent):
+        script_list = list(self.world.get_component(ScriptComponent))
+        
+        for ent, script_comp in script_list:
             if not script_comp.started:
                 script_comp.script.entity = ent
                 script_comp.script.world = self.world

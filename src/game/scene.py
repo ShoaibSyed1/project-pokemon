@@ -9,6 +9,8 @@ class Scene:
 
         self.world = esper.World()
 
+        self.scripts = []
+
         self.camera = None
         self.game_info = None
     
@@ -20,6 +22,9 @@ class Scene:
 
         self.camera = EntityLoader.load("camera", self.world)
         EntityLoader.load("ui_controller", self.world)
+
+        preloader = EntityLoader.load("preloader", self.world)
+        self.world.delete_entity(preloader)
 
         self.world.add_processor(AnimationProcessor(), 2)
         self.world.add_processor(EventProcessor(self.game_info))

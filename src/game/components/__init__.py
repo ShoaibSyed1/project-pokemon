@@ -26,11 +26,13 @@ from game.components.world import WorldInfo
 
 from game.components.ui import Element
 
+component_list.register(Animation, '_animation')
+component_list.register(AnimationGroups, '_animation_groups')
 component_list.register(EventListener, 'event_listener')
 component_list.register(GameInfo, 'game_info')
 component_list.register(InputComponent, 'input')
 component_list.register(ScriptComponent, 'script')
-component_list.register(Direction, 'direction')
+component_list.register(Sprite, '_sprite')
 component_list.register(Tile, 'tile')
 component_list.register(TileObject, 'tile_object')
 component_list.register(Transform, 'transform')
