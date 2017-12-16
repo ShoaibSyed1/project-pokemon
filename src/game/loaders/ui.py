@@ -50,7 +50,7 @@ class UiLoader:
         
         element_type = value['element']
         if element_type == 'button':
-            script_comp = ScriptComponent(Button())
+            script_comp = ScriptComponent(Button(value.get('text', "")))
             entities.append(world.create_entity(
                 element,
                 script_comp,
