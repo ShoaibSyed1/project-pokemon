@@ -85,7 +85,7 @@ class Button(Script):
             self.world.delete_entity(self.text_entity)
             self.text_entity = None
         
-        spr = self.font.render(text, False, (0, 0, 0))
+        spr = self.font.render(text, False, (255, 255, 255))
         self.text_entity = self.world.create_entity(
             Element({
                 'name': self.element.name + '_text',
