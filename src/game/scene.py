@@ -16,7 +16,7 @@ class Scene:
     
     def start(self):
         from game.loaders import EntityLoader, SceneLoader
-        from game.processors import AnimationProcessor, EventProcessor, RenderProcessor, ScriptProcessor
+        from game.processors import AnimationProcessor, ElementProcessor, EventProcessor, RenderProcessor, ScriptProcessor
 
         self.game_info = self.world.create_entity(GameInfo())
 
@@ -27,9 +27,10 @@ class Scene:
         self.world.delete_entity(preloader)
 
         self.world.add_processor(AnimationProcessor(), 2)
+        self.world.add_processor(ElementProcessor(), 3)
         self.world.add_processor(EventProcessor(self.game_info))
         self.world.add_processor(RenderProcessor(self.game.window, self.camera))
-        self.world.add_processor(ScriptProcessor(), 3)
+        self.world.add_processor(ScriptProcessor(), 4)
 
         SceneLoader.load(self.path, self.world)
     

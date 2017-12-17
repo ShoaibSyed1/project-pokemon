@@ -2,13 +2,25 @@ import json
 
 class EntityLoader:
     def load(path, world, merge=None):
-        path = "assets/entities/" + path + ".json"
+        entity_info = EntityLoader.load_obj(path)
+        
+        return EntityLoader.load_from(entity_info, world, merge)
+    
+    def load_obj(path):
+        import game
 
+        path = "assets/entities/" + path + ".json"
         entity_info = None
         with open(path) as file:
             entity_info = json.load(file)
         
-        return EntityLoader.load_from(entity_info, world, merge)
+        if entity_info.get('parent', None) != None:
+            parent_info = EntityLoader.load_obj(entity_info['parent'])
+            entity_info['parent'] = None
+
+            entity_info = game.deepupdate(parent_info, entity_info)
+        
+        return entity_info
 
     def load_from(entity_info, world, merge=None):
         import game
@@ -16,10 +28,8 @@ class EntityLoader:
         from game.loaders import SpriteLoader
         
         if entity_info.get('parent', None) != None:
-            parent_path = "assets/entities/" + entity_info['parent'] + ".json"
-            parent_info = None
-            with open(parent_path) as file:
-                parent_info = json.load(file)
+            parent_info = EntityLoader.load_obj(entity_info['parent'])
+            entity_info['parent'] = None
             
             entity_info = game.deepupdate(parent_info, entity_info)
         

@@ -18,8 +18,12 @@ class Button(Script):
         self.held = False
         self.inside = False
 
+        self.cb_enter = None
+        self.cb_enter_args = None
         self.cb_press = None
+        self.cb_press_args = None
         self.cb_release = None
+        self.cb_release_args = None
     
     def start(self):
         self.anim_groups = self.world.component_for_entity(self.entity, AnimationGroups)
@@ -31,6 +35,8 @@ class Button(Script):
     def on_ui_event(self, event):
         if event.type == UiEventType.MOUSE_ENTER and not self.held:
             self.anim_groups.current = 'hover'
+            if not self.inside:
+                self.on_enter()
             self.inside = True
         elif event.type == UiEventType.MOUSE_DOWN:
             self.held = True
@@ -48,19 +54,29 @@ class Button(Script):
             if not self.held:
                 self.anim_groups.current = 'up'
     
+    def on_enter(self):
+        if self.cb_enter != None:
+            self.cb_enter(*self.cb_enter_args)
+
     def on_press(self):
         if self.cb_press != None:
-            self.cb_press()
+            self.cb_press(*self.cb_press_args)
     
     def on_release(self):
         if self.cb_release != None:
-            self.cb_release()
+            self.cb_release(*self.cb_release_args)
     
-    def set_cb_press(self, cb_press):
+    def set_cb_enter(self, cb_enter, *args):
+        self.cb_enter = cb_enter
+        self.cb_enter_args = args
+    
+    def set_cb_press(self, cb_press, *args):
         self.cb_press = cb_press
+        self.cb_press_args = args
     
-    def set_cb_release(self, cb_release):
+    def set_cb_release(self, cb_release, *args):
         self.cb_release = cb_release
+        self.cb_release_args = args
     
     def set_text(self, text):
         from game.components import Sprite, Transform
