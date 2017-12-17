@@ -80,8 +80,8 @@ class BattleController(Script):
 
         self.info_label = EntityLoader.load("battle/ui/info_label", self.world)
         self.info_label_script = self.world.component_for_entity(self.info_label, ScriptComponent).script
-
-        EntityLoader.load("battle/ui/status_panel_front", self.world)
+        
+        self.status_panel_front = EntityLoader.load("battle/ui/status_panel_front", self.world)
         self.status_panel_back = EntityLoader.load("battle/ui/status_panel_back", self.world)
         anim = self.world.component_for_entity(self.status_panel_back, AnimationGroups).current = 'back'
     

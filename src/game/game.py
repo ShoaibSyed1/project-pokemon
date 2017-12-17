@@ -5,6 +5,7 @@ from game.scene import Scene
 
 class Game:
     def __init__(self):
+        pygame.mixer.pre_init(44100, -16, 2, 2048)
         pygame.init()
         self.window = pygame.display.set_mode((1024, 576))
         pygame.display.set_caption("Project Pokemon")

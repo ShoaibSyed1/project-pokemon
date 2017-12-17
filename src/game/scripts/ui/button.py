@@ -1,6 +1,7 @@
 import pygame
 from pygame.font import Font
 from pygame.math import Vector2
+from pygame.mixer import Sound
 
 from game.components import AnimationGroups
 from game.components.ui import Element
@@ -25,6 +26,9 @@ class Button(Script):
         self.cb_press_args = None
         self.cb_release = None
         self.cb_release_args = None
+
+        self.sound_press = Sound("assets/sounds/ui/button_press.ogg")
+        self.sound_release = Sound("assets/sounds/ui/button_release.ogg")
     
     def start(self):
         self.anim_groups = self.world.component_for_entity(self.entity, AnimationGroups)
@@ -68,10 +72,12 @@ class Button(Script):
             self.cb_enter(*self.cb_enter_args)
 
     def on_press(self):
+        self.sound_press.play()
         if self.cb_press != None:
             self.cb_press(*self.cb_press_args)
     
     def on_release(self):
+        self.sound_release.play()
         if self.cb_release != None:
             self.cb_release(*self.cb_release_args)
     
