@@ -15,6 +15,11 @@ class BattleController(Script):
 
         self.info_label = None
 
+        self.status_panel_front = None
+        self.status_panel_back = None
+
+        self.attack_button_scripts = [None, None, None, None]
+
     def start(self):
         from game.components import AnimationGroups, ScriptComponent
 
@@ -42,7 +47,9 @@ class BattleController(Script):
                 }
             })
 
-            self.world.component_for_entity(self.attack_buttons[i], ScriptComponent).script.set_cb_enter(self.attack_hover, i)
+            self.attack_button_scripts[i] = self.world.component_for_entity(self.attack_buttons[i], ScriptComponent).script
+            self.attack_button_scripts[i].set_cb_enter(self.attack_hover, i)
+            self.attack_button_scripts[i].disabled = True
         
         self.item_button = EntityLoader.load("battle/ui/button_left", self.world, {
             "element": {
@@ -73,6 +80,10 @@ class BattleController(Script):
 
         self.info_label = EntityLoader.load("battle/ui/info_label", self.world)
         self.info_label_script = self.world.component_for_entity(self.info_label, ScriptComponent).script
+
+        EntityLoader.load("battle/ui/status_panel_front", self.world)
+        self.status_panel_back = EntityLoader.load("battle/ui/status_panel_back", self.world)
+        anim = self.world.component_for_entity(self.status_panel_back, AnimationGroups).current = 'back'
     
     def update(self, delta):
         pass

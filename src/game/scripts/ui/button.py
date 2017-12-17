@@ -14,6 +14,7 @@ class Button(Script):
         self.font = Font("assets/fonts/normal.ttf", TEXT_SIZE)
         self.text = text
         self.text_entity = None
+        self.disabled = False
 
         self.held = False
         self.inside = False
@@ -32,27 +33,35 @@ class Button(Script):
         if self.text != None:
             self.set_text(self.text)
     
+    def update(self, delta):
+        if self.disabled:
+            self.anim_groups.current = 'disabled'
+    
     def on_ui_event(self, event):
         if event.type == UiEventType.MOUSE_ENTER and not self.held:
-            self.anim_groups.current = 'hover'
-            if not self.inside:
-                self.on_enter()
+            if not self.disabled:
+                self.anim_groups.current = 'hover'
+                if not self.inside:
+                    self.on_enter()
             self.inside = True
         elif event.type == UiEventType.MOUSE_DOWN:
             self.held = True
-            self.anim_groups.current = 'down'
-            self.on_press()
+            if not self.disabled:
+                self.anim_groups.current = 'down'
+                self.on_press()
         elif event.type == UiEventType.MOUSE_UP:
             self.held = False
-            if self.inside:
-                self.anim_groups.current = 'hover'
-            else:
-                self.anim_groups.current = 'up'
+            if not self.disabled:
+                if self.inside:
+                    self.anim_groups.current = 'hover'
+                else:
+                    self.anim_groups.current = 'up'
             self.on_release()
         elif event.type == UiEventType.MOUSE_LEAVE:
             self.inside = False
-            if not self.held:
-                self.anim_groups.current = 'up'
+            if not self.disabled:
+                if not self.held:
+                    self.anim_groups.current = 'up'
     
     def on_enter(self):
         if self.cb_enter != None:
