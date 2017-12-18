@@ -49,7 +49,7 @@ class BattleController(Script):
 
             self.attack_button_scripts[i] = self.world.component_for_entity(self.attack_buttons[i], ScriptComponent).script
             self.attack_button_scripts[i].set_cb_enter(self.attack_hover, i)
-            self.attack_button_scripts[i].disabled = True
+            self.attack_button_scripts[i].set_cb_release(self.attack_use, i)
         
         self.item_button = EntityLoader.load("battle/ui/button_left", self.world, {
             "element": {
@@ -90,6 +90,9 @@ class BattleController(Script):
     
     def attack_hover(self, index):
         self.info_label_script.text = str(index)
+    
+    def attack_use(self, index):
+        print("USED", index)
 
 class BattleState(Enum):
     WAITING = 0

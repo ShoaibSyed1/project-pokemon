@@ -26,7 +26,7 @@ class Scene:
         preloader = EntityLoader.load("preloader", self.world)
         self.world.delete_entity(preloader)
 
-        self.world.add_processor(AnimationProcessor(), 2)
+        self.world.add_processor(AnimationProcessor(), 5)
         self.world.add_processor(ElementProcessor(), 3)
         self.world.add_processor(EventProcessor(self.game_info))
         self.world.add_processor(RenderProcessor(self.game.window, self.camera))
