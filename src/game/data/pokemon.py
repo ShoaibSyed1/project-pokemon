@@ -2,20 +2,11 @@ import json
 from enum import Enum
 
 class PokemonData:
-    def __init__(self, pokeinfo, name, hp, xp, lvl, moves):
-        self.pokeinfo = pokeinfo
-        self.name = name
-        self.hp = hp
-        self.xp = xp
-        self.lvl = lvl
-        self.moves = moves
-
-
-class PokeInfo:
-    def __init__(self, pokemon, poketype, move_types):
+    def __init__(self, pokemon, name, hp, xp, lvl, moves):
         self.pokemon = pokemon
-        self.poketype = poketype
-        self.move_types = move_types
+        self.name = name
+        self.xp = xp
+        self.moves = moves
 
 def load(path):
     info = {}
@@ -25,6 +16,17 @@ def load(path):
     return info
 
 Pokemon = load("assets/data/pokemon.json")
-PokeType = load("assets/data/poketypes.json")
+PokeTypes = load("assets/data/poketypes.json")
 
-Move = load("assets/data/moves.json")
+Moves = load("assets/data/moves.json")
+
+def get_level(pokemon, xp):
+    import math
+
+    return ((90 + min(Pokemon[pokemon]['xp_base'], 30)) / 100 / 13) * math.sqrt(7 * xp)
+
+def get_yield(winner, loser):
+    l = get_level(loser.pokemon, loser.xp)
+    lp = get_level(winner.pokemon, winner.xp)
+
+    return (Pokemon[loser.pokemon]['yield_base'] * l / 5) * ((2 * l + 10)**2.5) / ((l + lp + 10) ** 2.5) + 1
