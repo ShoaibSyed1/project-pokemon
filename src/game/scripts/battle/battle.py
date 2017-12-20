@@ -94,8 +94,20 @@ class BattleController(Script):
         self.info_label = EntityLoader.load("battle/ui/info_label", self.world)
         self.info_label_script = self.world.component_for_entity(self.info_label, ScriptComponent).script
         
-        self.status_panel_front = EntityLoader.load("battle/ui/status_panel_front", self.world)
-        self.status_panel_back = EntityLoader.load("battle/ui/status_panel_back", self.world)
+        self.status_panel_front = EntityLoader.load("battle/ui/status_panel_front", self.world, {
+            "script": {
+                "args": {
+                    "name": self.battle_info.front_info.name
+                }
+            }
+        })
+        self.status_panel_back = EntityLoader.load("battle/ui/status_panel_back", self.world, {
+            "script": {
+                "args": {
+                    "name": self.battle_info.back_info.name
+                }
+            }
+        })
         anim = self.world.component_for_entity(self.status_panel_back, AnimationGroups).current = 'back'
     
     def update(self, delta):
