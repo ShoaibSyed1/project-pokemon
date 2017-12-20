@@ -60,7 +60,7 @@ class Button(Script):
                     self.anim_groups.current = 'hover'
                 else:
                     self.anim_groups.current = 'up'
-            self.on_release()
+                self.on_release()
         elif event.type == UiEventType.MOUSE_LEAVE:
             self.inside = False
             if not self.disabled:

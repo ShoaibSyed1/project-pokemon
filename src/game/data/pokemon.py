@@ -2,11 +2,17 @@ import json
 from enum import Enum
 
 class PokemonData:
-    def __init__(self, pokemon, name, hp, xp, lvl, moves):
+    def __init__(self, pokemon, name, xp, moves):
         self.pokemon = pokemon
         self.name = name
         self.xp = xp
         self.moves = moves
+
+class MoveData:
+    def __init__(self, move, pp):
+        self.name = move
+        self.move = Moves[move]
+        self.pp = pp
 
 def load(path):
     info = {}
